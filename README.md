@@ -1,4 +1,4 @@
-## [Sin publicar]
+## [PUUBLICADO]
 
 TODO
 
@@ -141,3 +141,80 @@ TODO
 ### Cambios
 
 - Añadidas señales de confirmacion para cambio de estados.
+
+## [0.8.8] - 2024-02-22
+
+### Cambios
+
+- Alternancia para 1 solo relé (modelo 1 y 1)
+
+### Bugs
+
+- Alternancia no se adhiere al orden 1, 2, 3. Alterna entre distintos relés sin orden aparente.
+
+## [0.8.9] - 2024-03-6
+
+### Cambios
+
+- FSM movida a main.
+
+### Deprecated
+
+- Rutina blink llegando a su EOF.
+
+## [0.9.0] - 2024-03-15
+
+### Añadido
+
+- Default cases para los switches, mejoró el rendimiento y el fixeo de bugs.
+- Rutina de Generadora de Codigo Gray, esto permite calcular el siguiente grupo de trabajo a ser llamado dentro de la FSM.
+
+### Eliminado
+
+- La capacidad de decidir el siguiente grupo de trabajo dentro de la FSM.
+
+## [0.9.2] - 2024-03-19
+
+### Reparado
+
+- Bug que permitia a la FSM cambiar de estado antes de darle permiso de paso.
+- Manera en que se llama a la funcion Gray Code Machine, ahora se llama desde cada caso en la FSM y regresa un valor que luego se evalua.
+
+## [1.0.0] - 2024-03-22
+
+### Eliminado
+
+- Se revirtio a usar una FSM sin la Generadora de Codigos Gray
+
+## [1.0.2] - 2024-03-26 (Entragado y probado para Carcamo 2)
+
+### Reparado
+
+- La señal clock0 ahora esta dentro de la rutina FSM y la asignacion del siguiente estado fuera de la FSM.
+- Se eliminaron los loops de cargar el mismo estado dentro del siguiente estado.
+
+## [1.0.2.1] - 2024-04-04 (En pruebas para entrega a Bypass)
+
+### Modificado
+
+- El grupo de trabajo ahora solo funciona con 1 solo relé a la vez (modo 1 encendido y dos apagados) en orden.
+- clock0 se dejo fuera de la FSM y la asignacion del siguiente estado ahora ocurre junto el desborde de tmr0 cada 1 @ 20Mhz.
+- Se añadieron de nuevo los loops para cargar el mismo estado dentro de nextstate.
+
+## [1.1.0] - 2024-04-10
+
+#### Añadido
+
+- Soporte para Grupos de Trabajo de 4 relés (2 encendidos, 2 apagados).
+
+## [1.2.0] - 2024-04-20
+
+#### Añadido
+
+- Soporte para Grupos de Trabajo de 5 relés (2 encendidos, 3 apagados alternando con 3 encendidos y 2 apagados).
+
+## [1.3.0] - 2024-05-16
+
+### Añadido
+
+- Soporte para Grupos de Trabajo mixtos (3 niveles, con alternancia equivalente al nivel).
