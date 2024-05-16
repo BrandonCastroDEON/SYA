@@ -1,7 +1,7 @@
 //*******************************************************************
 // Programa: Simultaneo y Alternancia para bombas
 // Autor(es): Brandon Castro.
-// Version: 1.0.2
+// Version: 1.0.2.1
 //*******************************************************************
 // Fecha: 21-03-2024
 //*******************************************************************
@@ -71,16 +71,18 @@ void Events(); // Rutina de decision sentido de flanco
 
 void interrupt(){
 
-     // if(PIR0.TMR0IF){
-     //      TMR0H = 0x3C;      // Timer para cada segundo y medio?
-     //      TMR0L = 0xB0;      //
-     //      PIR0.TMR0IF = 0;
-     //      counter++;
-     //      if(counter >= 5){
-     //           clock0 = 1;
-     //           counter = 0;
-     //      }
-     // }
+     if(PIR0.TMR0IF){
+          TMR0H = 0xEC;      // Timer para cada segundo y medio?
+          TMR0L = 0x78;      //
+          PIR0.TMR0IF = 0;
+          counter++;
+          clock0 = ~clock0;
+          current_state = next_state; // Maybe move this with Events
+          if(counter >= 1000){
+               LED = ~LED;
+               counter = 0;
+          }
+     }
      // Tenemos bandera de IOC en C0? y el bit de enable en IOC esta en 1?
      if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
           IOCCF.B0 = 0; // Limpiamos la bandera de IOC
@@ -109,7 +111,6 @@ void main(){
 
      while(1){
           clock0 = 1;
-          current_state = next_state; // Maybe move this with Events
           FSM();
      }
 
@@ -332,10 +333,10 @@ void InitInterrupt(){
 
      PIE0 = 0x30;    // Enable bit de IOC (Interrupt on Change)
      PIR0 = 0x00;    // Limpiamos la bandera de IOC
-     // T0CON0 = 0x90;
-     // T0CON1 = 0x40;
-     // TMR0H = 0x3C;
-     // TMR0L = 0xB0;
+     T0CON0 = 0x90;
+     T0CON1 = 0x40;
+     TMR0H = 0xEC;
+     TMR0L = 0x78;
      IOCCN = 0x03;   // Activamos las banderas de IOC en Transicion negativa para C0 y C1
      IOCCP = 0x03;   // Activamos las banderas de IOC en Transicion positiva para C0 y C1
      IOCCF = 0x00;   // Limpiamos la bandera de IOC
