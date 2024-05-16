@@ -1,0 +1,8 @@
+[PROJECTS]
+Count=4
+Project0=FIRMWARE SYA ver 1.0.0\FIRMWARE SYA ver 0.8.0\FIRMWARE SYA ver 0.8.8\FIRMWARE_SYA_ver_0_8_8.mcppi
+Project1=FIRMWARE SYA ver 1.0.2\FIRMWARE_SYA_ver_1_0_2.mcppi
+Project2=FIRMWARE SYA ver 1.0.2\FIRMWARE SYA ver 1.0.2.1\FIRMWARE_SYA_ver_1_0_2_1.mcppi
+Project3=FIRMWARE SYA ver 1.3.0\FIRMWARE_SYA_ver_1_3_0.mcppi
+[ActiveProject]
+Index=3
