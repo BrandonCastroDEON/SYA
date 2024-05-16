@@ -18,6 +18,12 @@ bit sn_NegEdge_3;
 bit GT1;
 bit GT2;
 bit GT3;
+bit GT1A;
+bit GT2A;
+bit GT3A;
+bit GT4;
+bit GT5;
+bit GT6;
 bit sn_GoTo;
 short unsigned int current_state, next_state;
 
@@ -35,7 +41,7 @@ void Events();
 
 
 void interrupt(){
-#line 93 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
+#line 99 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
  IOCCF.B0 = 0;
  interruptC0 = 1;
@@ -67,7 +73,6 @@ void main(){
  }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
 
  while(1){
- clock0 = 1;
  current_state = next_state;
  FSM();
  }
@@ -79,7 +84,7 @@ void main(){
 
 
 void FSM(){
-
+ clock0 = 1;
  switch(current_state){
  case 0:
   LATA.F5  = 0;
@@ -88,10 +93,9 @@ void FSM(){
  sn_GoTo = 0;
 
  if((1 == sn_PosEdge_1) && (1 == clock0)){
- next_state = 7;
+ next_state = 9;
  }
  else{
- next_state = 0;
  }
  break;
  case 1:
@@ -114,7 +118,6 @@ void FSM(){
  }
 
  else{
- next_state = 1;
  }
  break;
  case 2:
@@ -132,11 +135,10 @@ void FSM(){
 
  else if((1 == sn_PosEdge_2) && (1 == clock0)){
 
- next_state = 4;
+ next_state = 5;
  }
 
  else{
- next_state = 2;
  }
  break;
  case 3:
@@ -154,34 +156,103 @@ void FSM(){
 
  else if((1 == sn_PosEdge_2) && (1 == clock0)){
 
- next_state = 4;
+ next_state = 6;
  }
 
  else{
- next_state = 3;
  }
  break;
  case 4:
+ if(1 == GT1A){
   LATA.F5  = 1;
   LATE.F0  = 1;
+ GT1A = 0;
+ }
+ else{
+  LATA.F5  = 1;
+  LATE.F1  = 1;
+ GT1A = 1;
+ }
+ GT4 = 1;
+ GT5 = 0;
+ GT6 = 0;
 
  if((1 == sn_NegEdge_1) && (1 == clock0)){
  next_state = 0;
  }
  else if((1 == sn_NegEdge_2) && (1 == clock0)){
 
- next_state = 6;
+ next_state = 1;
  sn_GoTo = 1;
  }
  else if((1 == sn_PosEdge_3) && (1 == clock0)){
- next_state = 5;
+ next_state = 7;
  }
 
  else{
- next_state = 4;
  }
  break;
  case 5:
+ if(1 == GT2A){
+  LATE.F0  = 1;
+  LATA.F5  = 1;
+ GT2A = 0;
+ }
+ else{
+  LATE.F0  = 1;
+  LATE.F1  = 1;
+ GT2A = 1;
+ }
+ GT4 = 0;
+ GT5 = 1;
+ GT6 = 0;
+
+ if((1 == sn_NegEdge_1) && (1 == clock0)){
+ next_state = 0;
+ }
+ else if((1 == sn_NegEdge_2) && (1 == clock0)){
+
+ next_state = 2;
+ sn_GoTo = 1;
+ }
+ else if((1 == sn_PosEdge_3) && (1 == clock0)){
+ next_state = 7;
+ }
+
+ else{
+ }
+ break;
+ case 6:
+ if(1 == GT3A){
+  LATE.F1  = 1;
+  LATA.F5  = 1;
+ GT3A = 0;
+ }
+ else{
+  LATE.F1  = 1;
+  LATE.F0  = 1;
+ GT3A = 1;
+ }
+ GT4 = 0;
+ GT5 = 0;
+ GT6 = 1;
+
+ if((1 == sn_NegEdge_1) && (1 == clock0)){
+ next_state = 0;
+ }
+ else if((1 == sn_NegEdge_2) && (1 == clock0)){
+
+ next_state = 3;
+ sn_GoTo = 1;
+ }
+ else if((1 == sn_PosEdge_3) && (1 == clock0)){
+ next_state = 7;
+ }
+
+ else{
+ }
+ break;
+ case 7:
   LATA.F5  = 1;
   LATE.F0  = 1;
   LATE.F1  = 1;
@@ -189,29 +260,27 @@ void FSM(){
  next_state = 0;
  }
  else if((1 == sn_NegEdge_3) && (1 == clock0)){
+ next_state = 8;
+ }
+ else{
+ }
+ break;
+ case 8:
+
+ if((1 == sn_GoTo) && (1 == GT4) && (1 == clock0)){
+ next_state = 5;
+ }
+ else if((1 == sn_GoTo) && (1 == GT5) && (1 == clock0)){
+ next_state = 6;
+ }
+ else if((1 == sn_GoTo) && (1 == GT6) && (1 == clock0)){
  next_state = 4;
  }
- else{
- next_state = 5;
- }
- break;
- case 6:
-
- if((1 == sn_GoTo) && (1 == GT1) && (1 == clock0)){
- next_state = 2;
- }
- else if((1 == sn_GoTo) && (1 == GT2) && (1 == clock0)){
- next_state = 3;
- }
- else if((1 == sn_GoTo) && (1 == GT3) && (1 == clock0)){
- next_state = 1;
- }
 
  else{
- next_state = 5;
  }
  break;
- case 7:
+ case 9:
  if(1 == sn_PosEdge_1){
 
  if((1 == GT1) && (1 == clock0)){
@@ -236,7 +305,6 @@ void FSM(){
  }
 
  else{
- next_state = 7;
  }
  }
  break;
@@ -244,6 +312,12 @@ void FSM(){
  GT1 = 0;
  GT2 = 0;
  GT3 = 1;
+ GT1A = 1;
+ GT2A = 1;
+ GT3A = 1;
+ GT4 = 0;
+ GT5 = 0;
+ GT6 = 0;
   LATA.F5  = 0;
   LATE.F0  = 0;
   LATE.F1  = 0;
