@@ -121,7 +121,6 @@ void main(){
      }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
 
      while(1){
-          clock0 = 1;
           current_state = next_state; // Maybe move this with Events
           FSM();
      }
@@ -133,7 +132,7 @@ void main(){
 //*******************************************************************
 
 void FSM(){
-
+     clock0 = 1;
      switch(current_state){
           case 0: // S0 - Todo apagado
                M1 = 0;
@@ -145,7 +144,6 @@ void FSM(){
                     next_state = 7; // Si, pasamos a estado 6
                }
                else{
-                    next_state = 0;
                }
                break;
           case 1: // S1 - Grupo de trabajo 1 110
@@ -168,7 +166,6 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 1;
                }
                break;
           case 2: // S2 - Grupo de trabajo 2 011
@@ -190,7 +187,6 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 2;
                }
                break;
           case 3: // S3 - Grupo de trabajo 3 101
@@ -212,7 +208,6 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 3;
                }
                break;
           case 4: // S4 - Grupo de trabajo 4 111
@@ -232,7 +227,6 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 4;
                }
                break;
           case 5:
@@ -246,7 +240,6 @@ void FSM(){
                     next_state = 4;
                }
                else{
-                    next_state = 5;
                }
                break;
           case 6: // S5 - Estado de transicion para flanco negativo 2
@@ -262,7 +255,6 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 5;
                }
                break;
           case 7: // S6 - Estado de transicion para flanco positivo
@@ -290,7 +282,6 @@ void FSM(){
                     }
                     // Si no,
                     else{
-                         next_state = 7;
                     }
                }
                break;
