@@ -1,4 +1,6 @@
-./*.mcpigroup
+*.mcpigroup
+SYA.mcpigroup
+aa.mcpigroup
 .bmk
 .brk
 .cfg
