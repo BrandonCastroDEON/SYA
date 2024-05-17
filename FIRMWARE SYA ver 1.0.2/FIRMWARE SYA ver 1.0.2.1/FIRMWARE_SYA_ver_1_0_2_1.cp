@@ -32,7 +32,7 @@ void Events();
 
 
 void interrupt(){
-#line 85 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.0.2/FIRMWARE SYA ver 1.0.2.1/FIRMWARE_SYA_ver_1_0_2_1.c"
+#line 86 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.0.2/FIRMWARE SYA ver 1.0.2.1/FIRMWARE_SYA_ver_1_0_2_1.c"
  if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
  IOCCF.B0 = 0;
  interruptC0 = 1;
@@ -59,7 +59,6 @@ void main(){
  }while((1 == IOCCF.B0) || (1 == IOCCF.B1));
 
  while(1){
- clock0 = 1;
  current_state = next_state;
  FSM();
  }
@@ -71,7 +70,7 @@ void main(){
 
 
 void FSM(){
-
+ clock0 = 1;
  switch(current_state){
  case 0:
   LATA.F5  = 0;
@@ -83,7 +82,7 @@ void FSM(){
  next_state = 6;
  }
  else{
- next_state = 0;
+
  }
  break;
  case 1:
@@ -106,7 +105,7 @@ void FSM(){
  }
 
  else{
- next_state = 1;
+
  }
  break;
  case 2:
@@ -128,7 +127,7 @@ void FSM(){
  }
 
  else{
- next_state = 2;
+
  }
  break;
  case 3:
@@ -150,7 +149,7 @@ void FSM(){
  }
 
  else{
- next_state = 3;
+
  }
  break;
  case 4:
@@ -168,7 +167,7 @@ void FSM(){
  }
 
  else{
- next_state = 4;
+
  }
  break;
  case 5:
@@ -184,7 +183,7 @@ void FSM(){
  }
 
  else{
- next_state = 5;
+
  }
  break;
  case 6:
@@ -212,7 +211,7 @@ void FSM(){
  }
 
  else{
- next_state = 6;
+
  }
  }
  break;
@@ -283,10 +282,10 @@ void InitInterrupt(){
 
  PIE0 = 0x30;
  PIR0 = 0x00;
-
-
-
-
+ T0CON0 = 0x90;
+ T0CON1 = 0x40;
+ TMR0H = 0xEC;
+ TMR0L = 0x78;
  IOCCN = 0x03;
  IOCCP = 0x03;
  IOCCF = 0x00;
