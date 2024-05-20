@@ -93,7 +93,7 @@ void FSM(){
  sn_GoTo = 0;
 
  if((1 == sn_PosEdge_1) && (1 == clock0)){
- next_state = 9;
+ next_state = 7;
  }
  else{
  }
@@ -135,7 +135,7 @@ void FSM(){
 
  else if((1 == sn_PosEdge_2) && (1 == clock0)){
 
- next_state = 5;
+ next_state = 4;
  }
 
  else{
@@ -156,26 +156,40 @@ void FSM(){
 
  else if((1 == sn_PosEdge_2) && (1 == clock0)){
 
- next_state = 6;
+ next_state = 4;
  }
 
  else{
  }
  break;
  case 4:
- if(1 == GT1A){
+ switch(GT1){
+ case 0:
+ switch(GT2){
+ case 0:
+ switch(GT3){
+ case 0:
+ break;
+ case 1:
+  LATA.F5  = 1;
+  LATE.F0  = 0;
+  LATE.F1  = 1;
+ break;
+ }
+ break;
+ case 1:
+  LATA.F5  = 0;
+  LATE.F0  = 1;
+  LATE.F1  = 1;
+ break;
+ }
+ break;
+ case 1:
   LATA.F5  = 1;
   LATE.F0  = 1;
- GT1A = 0;
+  LATE.F1  = 0;
+ break;
  }
- else{
-  LATA.F5  = 1;
-  LATE.F1  = 1;
- GT1A = 1;
- }
- GT4 = 1;
- GT5 = 0;
- GT6 = 0;
 
  if((1 == sn_NegEdge_1) && (1 == clock0)){
  next_state = 0;
@@ -186,73 +200,13 @@ void FSM(){
  sn_GoTo = 1;
  }
  else if((1 == sn_PosEdge_3) && (1 == clock0)){
- next_state = 7;
+ next_state = 5;
  }
 
  else{
  }
  break;
  case 5:
- if(1 == GT2A){
-  LATE.F0  = 1;
-  LATA.F5  = 1;
- GT2A = 0;
- }
- else{
-  LATE.F0  = 1;
-  LATE.F1  = 1;
- GT2A = 1;
- }
- GT4 = 0;
- GT5 = 1;
- GT6 = 0;
-
- if((1 == sn_NegEdge_1) && (1 == clock0)){
- next_state = 0;
- }
- else if((1 == sn_NegEdge_2) && (1 == clock0)){
-
- next_state = 2;
- sn_GoTo = 1;
- }
- else if((1 == sn_PosEdge_3) && (1 == clock0)){
- next_state = 7;
- }
-
- else{
- }
- break;
- case 6:
- if(1 == GT3A){
-  LATE.F1  = 1;
-  LATA.F5  = 1;
- GT3A = 0;
- }
- else{
-  LATE.F1  = 1;
-  LATE.F0  = 1;
- GT3A = 1;
- }
- GT4 = 0;
- GT5 = 0;
- GT6 = 1;
-
- if((1 == sn_NegEdge_1) && (1 == clock0)){
- next_state = 0;
- }
- else if((1 == sn_NegEdge_2) && (1 == clock0)){
-
- next_state = 3;
- sn_GoTo = 1;
- }
- else if((1 == sn_PosEdge_3) && (1 == clock0)){
- next_state = 7;
- }
-
- else{
- }
- break;
- case 7:
   LATA.F5  = 1;
   LATE.F0  = 1;
   LATE.F1  = 1;
@@ -260,27 +214,36 @@ void FSM(){
  next_state = 0;
  }
  else if((1 == sn_NegEdge_3) && (1 == clock0)){
- next_state = 8;
+ next_state = 6;
  }
  else{
  }
  break;
- case 8:
+ case 6:
 
- if((1 == sn_GoTo) && (1 == GT4) && (1 == clock0)){
- next_state = 5;
+ if((1 == sn_GoTo) && (1 == GT1) && (1 == clock0)){
+ GT2 = 1;
+ GT3 = 0;
+ GT1 = 0;
+ next_state = 4;
  }
- else if((1 == sn_GoTo) && (1 == GT5) && (1 == clock0)){
- next_state = 6;
+ else if((1 == sn_GoTo) && (1 == GT2) && (1 == clock0)){
+ GT2 = 0;
+ GT1 = 0;
+ GT3 = 1;
+ next_state = 4;
  }
- else if((1 == sn_GoTo) && (1 == GT6) && (1 == clock0)){
+ else if((1 == sn_GoTo) && (1 == GT3) && (1 == clock0)){
+ GT1 = 1;
+ GT2 = 0;
+ GT3 = 0;
  next_state = 4;
  }
 
  else{
  }
  break;
- case 9:
+ case 7:
  if(1 == sn_PosEdge_1){
 
  if((1 == GT1) && (1 == clock0)){

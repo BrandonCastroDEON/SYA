@@ -147,7 +147,7 @@ void FSM(){
                sn_GoTo = 0;
                // Tenemos señal de flanco positivo 1?
                if((1 == sn_PosEdge_1) && (1 == clock0)){
-                    next_state = 9; // Si, pasamos a estado 6
+                    next_state = 7; // Si, pasamos a estado 6
                }
                else{
                }
@@ -189,7 +189,7 @@ void FSM(){
                // Tenemos señal de flanco positivo 2?
                else if((1 == sn_PosEdge_2) && (1 == clock0)){
                     // Si, pasamos a estado 4
-                    next_state = 5;
+                    next_state = 4;
                }
                // Si no,
                else{
@@ -210,26 +210,40 @@ void FSM(){
                // Tenemos señal de flanco positivo 2?
                else if((1 == sn_PosEdge_2) && (1 == clock0)){
                     // Si, pasamos a estado 4
-                    next_state = 6;
+                    next_state = 4;
                }
                // Si no,
                else{
                }
                break;
           case 4: // S4 - Grupo de trabajo 4 111
-               if(1 == GT1A){ //  Maybe change them to while
-                    M1 = 1;
-                    M2 = 1;
-                    GT1A = 0;
+               switch(GT1){
+                    case 0:
+                         switch(GT2){
+                              case 0:
+                                   switch(GT3){
+                                        case 0:
+                                             break;
+                                        case 1:
+                                             M1 = 1;
+                                             M2 = 0;
+                                             M3 = 1;
+                                             break;
+                                   }
+                                   break;
+                              case 1:
+                                   M1 = 0;
+                                   M2 = 1;
+                                   M3 = 1;
+                                   break;
+                         }
+                         break;
+                    case 1:
+                         M1 = 1;
+                         M2 = 1;
+                         M3 = 0;
+                         break;
                }
-               else{
-                    M1 = 1;
-                    M3 = 1;
-                    GT1A = 1;
-               }
-               GT4 = 1;
-               GT5 = 0;
-               GT6 = 0;
                // Tenemos señal de flango negativo 2?
                if((1 == sn_NegEdge_1) && (1 == clock0)){
                     next_state = 0;
@@ -240,73 +254,13 @@ void FSM(){
                     sn_GoTo = 1; // Ponemos en 1 la señal de transicion
                }
                else if((1 == sn_PosEdge_3) && (1 == clock0)){
-                    next_state = 7; // cambiar
+                    next_state = 5; // cambiar
                }
                // Si no,
                else{
                }
                break;
           case 5:
-               if(1 == GT2A){
-                    M2 = 1;
-                    M1 = 1;
-                    GT2A = 0;
-               }
-               else{
-                    M2 = 1;
-                    M3 = 1;
-                    GT2A = 1;
-               }
-               GT4 = 0;
-               GT5 = 1;
-               GT6 = 0;
-               // Tenemos señal de flango negativo 2?
-               if((1 == sn_NegEdge_1) && (1 == clock0)){
-                    next_state = 0;
-               }
-               else if((1 == sn_NegEdge_2) && (1 == clock0)){
-                    // Si, pasamos a estado 5
-                    next_state = 2;
-                    sn_GoTo = 1; // Ponemos en 1 la señal de transicion
-               }
-               else if((1 == sn_PosEdge_3) && (1 == clock0)){
-                    next_state = 7; // cambiar
-               }
-               // Si no,
-               else{
-               }
-               break;
-          case 6:
-               if(1 == GT3A){
-                    M3 = 1;
-                    M1 = 1;
-                    GT3A = 0;
-               }
-               else{
-                    M3 = 1;
-                    M2 = 1;
-                    GT3A = 1;
-               }
-               GT4 = 0;
-               GT5 = 0;
-               GT6 = 1;
-               // Tenemos señal de flango negativo 2?
-               if((1 == sn_NegEdge_1) && (1 == clock0)){
-                    next_state = 0;
-               }
-               else if((1 == sn_NegEdge_2) && (1 == clock0)){
-                    // Si, pasamos a estado 5
-                    next_state = 3;
-                    sn_GoTo = 1; // Ponemos en 1 la señal de transicion
-               }
-               else if((1 == sn_PosEdge_3) && (1 == clock0)){
-                    next_state = 7; // cambiar
-               }
-               // Si no,
-               else{
-               }
-               break;
-          case 7:
                M1 = 1;
                M2 = 1;
                M3 = 1;
@@ -314,27 +268,36 @@ void FSM(){
                     next_state = 0;
                }
                else if((1 == sn_NegEdge_3) && (1 == clock0)){
-                    next_state = 8;
+                    next_state = 6;
                }
                else{
                }
                break;
-          case 8: // S5 - Estado de transicion para flanco negativo 2
+          case 6: // S5 - Estado de transicion para flanco negativo 2
                // Tenemos señal de transicion?
-               if((1 == sn_GoTo) && (1 == GT4) && (1 == clock0)){
-                    next_state = 5;
+               if((1 == sn_GoTo) && (1 == GT1) && (1 == clock0)){
+                    GT2 = 1;
+                    GT3 = 0;
+                    GT1 = 0;
+                    next_state = 4;
                }
-               else if((1 == sn_GoTo) && (1 == GT5) && (1 == clock0)){
-                    next_state = 6;
+               else if((1 == sn_GoTo) && (1 == GT2) && (1 == clock0)){
+                    GT2 = 0;
+                    GT1 = 0;
+                    GT3 = 1;
+                    next_state = 4;
                }
-               else if((1 == sn_GoTo) && (1 == GT6) && (1 == clock0)){
+               else if((1 == sn_GoTo) && (1 == GT3) && (1 == clock0)){
+                    GT1 = 1;
+                    GT2 = 0;
+                    GT3 = 0;
                     next_state = 4;
                }
                // Si no,
                else{
                }
                break;
-          case 9: // S6 - Estado de transicion para flanco positivo
+          case 7: // S6 - Estado de transicion para flanco positivo
                if(1 == sn_PosEdge_1){
                     // Tenemos señal de GT1 y GT2 junto con GT3 en 0?
                     if((1 == GT1) && (1 == clock0)){
