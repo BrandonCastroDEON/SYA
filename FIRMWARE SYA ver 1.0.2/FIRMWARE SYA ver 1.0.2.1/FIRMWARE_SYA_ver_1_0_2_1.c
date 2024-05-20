@@ -71,18 +71,17 @@ void Events(); // Rutina de decision sentido de flanco
 
 void interrupt(){
 
-     if(PIR0.TMR0IF){
-          TMR0H = 0xEC;      // Timer para cada segundo y medio?
-          TMR0L = 0x78;      //
-          PIR0.TMR0IF = 0;
-          counter++;
-          clock0 = ~clock0;
-          current_state = next_state; // Maybe move this with Events
-          if(counter >= 1000){
-               LED = ~LED;
-               counter = 0;
-          }
-     }
+     // if(PIR0.TMR0IF){
+     //      TMR0H = 0xEC;      // Timer para cada segundo y medio?
+     //      TMR0L = 0x78;      //
+     //      PIR0.TMR0IF = 0;
+     //      counter++;
+     //      clock0 = ~clock0;
+     //      if(counter >= 1000){
+     //           LED = ~LED;
+     //           counter = 0;
+     //      }
+     // }
      // Tenemos bandera de IOC en C0? y el bit de enable en IOC esta en 1?
      if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
           IOCCF.B0 = 0; // Limpiamos la bandera de IOC
@@ -110,7 +109,7 @@ void main(){
      }while((1 == IOCCF.B0) || (1 == IOCCF.B1));
 
      while(1){
-          clock0 = 1;
+          current_state = next_state; // Maybe move this with Events
           FSM();
      }
 
@@ -121,7 +120,7 @@ void main(){
 //*******************************************************************
 
 void FSM(){
-
+     clock0 = 1;
      switch(current_state){
           case 0: // S0 - Todo apagado
                M1 = 0;
@@ -133,7 +132,7 @@ void FSM(){
                     next_state = 6; // Si, pasamos a estado 6
                }
                else{
-                    next_state = 0;
+                    // next_state = 0;
                }
                break;
           case 1: // S1 - Grupo de trabajo 1 110
@@ -156,7 +155,7 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 1;
+                    // next_state = 1;
                }
                break;
           case 2: // S2 - Grupo de trabajo 2 011
@@ -178,7 +177,7 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 2;
+                    // next_state = 2;
                }
                break;
           case 3: // S3 - Grupo de trabajo 3 101
@@ -200,7 +199,7 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 3;
+                    // next_state = 3;
                }
                break;
           case 4: // S4 - Grupo de trabajo 4 111
@@ -218,7 +217,7 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 4;
+                    // next_state = 4;
                }
                break;
           case 5: // S5 - Estado de transicion para flanco negativo 2
@@ -234,7 +233,7 @@ void FSM(){
                }
                // Si no,
                else{
-                    next_state = 5;
+                    // next_state = 5;
                }
                break;
           case 6: // S6 - Estado de transicion para flanco positivo
@@ -262,7 +261,7 @@ void FSM(){
                     }
                     // Si no,
                     else{
-                         next_state = 6;
+                         // next_state = 6;
                     }
                }
                break;

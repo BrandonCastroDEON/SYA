@@ -2,31 +2,31 @@
 _interrupt:
 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,72 :: 		void interrupt(){
-;FIRMWARE_SYA_ver_1_0_2_1.c,85 :: 		if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
+;FIRMWARE_SYA_ver_1_0_2_1.c,86 :: 		if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
 	BTFSS       IOCCF+0, 0 
 	GOTO        L_interrupt2
 	BTFSS       IOCIE_bit+0, BitPos(IOCIE_bit+0) 
 	GOTO        L_interrupt2
 L__interrupt93:
-;FIRMWARE_SYA_ver_1_0_2_1.c,86 :: 		IOCCF.B0 = 0; // Limpiamos la bandera de IOC
+;FIRMWARE_SYA_ver_1_0_2_1.c,87 :: 		IOCCF.B0 = 0; // Limpiamos la bandera de IOC
 	BCF         IOCCF+0, 0 
-;FIRMWARE_SYA_ver_1_0_2_1.c,87 :: 		interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
+;FIRMWARE_SYA_ver_1_0_2_1.c,88 :: 		interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
 	BSF         _interruptC0+0, BitPos(_interruptC0+0) 
-;FIRMWARE_SYA_ver_1_0_2_1.c,88 :: 		}
+;FIRMWARE_SYA_ver_1_0_2_1.c,89 :: 		}
 L_interrupt2:
-;FIRMWARE_SYA_ver_1_0_2_1.c,90 :: 		if((1 == IOCCF.B1) && (1 == IOCIE_bit)){
+;FIRMWARE_SYA_ver_1_0_2_1.c,91 :: 		if((1 == IOCCF.B1) && (1 == IOCIE_bit)){
 	BTFSS       IOCCF+0, 1 
 	GOTO        L_interrupt5
 	BTFSS       IOCIE_bit+0, BitPos(IOCIE_bit+0) 
 	GOTO        L_interrupt5
 L__interrupt92:
-;FIRMWARE_SYA_ver_1_0_2_1.c,91 :: 		IOCCF.B1 = 0; // Limpiamos la bandera de IOC
+;FIRMWARE_SYA_ver_1_0_2_1.c,92 :: 		IOCCF.B1 = 0; // Limpiamos la bandera de IOC
 	BCF         IOCCF+0, 1 
-;FIRMWARE_SYA_ver_1_0_2_1.c,92 :: 		interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
+;FIRMWARE_SYA_ver_1_0_2_1.c,93 :: 		interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
 	BSF         _interruptC1+0, BitPos(_interruptC1+0) 
-;FIRMWARE_SYA_ver_1_0_2_1.c,93 :: 		}
+;FIRMWARE_SYA_ver_1_0_2_1.c,94 :: 		}
 L_interrupt5:
-;FIRMWARE_SYA_ver_1_0_2_1.c,95 :: 		}
+;FIRMWARE_SYA_ver_1_0_2_1.c,96 :: 		}
 L_end_interrupt:
 L__interrupt111:
 	RETFIE      1
@@ -34,25 +34,23 @@ L__interrupt111:
 
 _main:
 
-;FIRMWARE_SYA_ver_1_0_2_1.c,101 :: 		void main(){
-;FIRMWARE_SYA_ver_1_0_2_1.c,103 :: 		InitInterrupt(); // MCU interrupt config
+;FIRMWARE_SYA_ver_1_0_2_1.c,102 :: 		void main(){
+;FIRMWARE_SYA_ver_1_0_2_1.c,104 :: 		InitInterrupt(); // MCU interrupt config
 	CALL        _InitInterrupt+0, 0
-;FIRMWARE_SYA_ver_1_0_2_1.c,104 :: 		InitMCU();       // MCU pin/reg config
+;FIRMWARE_SYA_ver_1_0_2_1.c,105 :: 		InitMCU();       // MCU pin/reg config
 	CALL        _InitMCU+0, 0
-;FIRMWARE_SYA_ver_1_0_2_1.c,106 :: 		do{
+;FIRMWARE_SYA_ver_1_0_2_1.c,107 :: 		do{
 L_main6:
-;FIRMWARE_SYA_ver_1_0_2_1.c,107 :: 		Events();
+;FIRMWARE_SYA_ver_1_0_2_1.c,108 :: 		Events();
 	CALL        _Events+0, 0
-;FIRMWARE_SYA_ver_1_0_2_1.c,108 :: 		}while((1 == IOCCF.B0) || (1 == IOCCF.B1));
+;FIRMWARE_SYA_ver_1_0_2_1.c,109 :: 		}while((1 == IOCCF.B0) || (1 == IOCCF.B1));
 	BTFSC       IOCCF+0, 0 
 	GOTO        L_main6
 	BTFSC       IOCCF+0, 1 
 	GOTO        L_main6
 L__main94:
-;FIRMWARE_SYA_ver_1_0_2_1.c,110 :: 		while(1){
+;FIRMWARE_SYA_ver_1_0_2_1.c,111 :: 		while(1){
 L_main11:
-;FIRMWARE_SYA_ver_1_0_2_1.c,111 :: 		clock0 = 1;
-	BSF         _clock0+0, BitPos(_clock0+0) 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,112 :: 		current_state = next_state; // Maybe move this with Events
 	MOVF        _next_state+0, 0 
 	MOVWF       _current_state+0 
@@ -68,6 +66,8 @@ L_end_main:
 _FSM:
 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,122 :: 		void FSM(){
+;FIRMWARE_SYA_ver_1_0_2_1.c,123 :: 		clock0 = 1;
+	BSF         _clock0+0, BitPos(_clock0+0) 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,124 :: 		switch(current_state){
 	GOTO        L_FSM13
 ;FIRMWARE_SYA_ver_1_0_2_1.c,125 :: 		case 0: // S0 - Todo apagado
@@ -92,8 +92,6 @@ L__FSM109:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,133 :: 		}
 	GOTO        L_FSM19
 L_FSM18:
-;FIRMWARE_SYA_ver_1_0_2_1.c,135 :: 		next_state = 0;
-	CLRF        _next_state+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,136 :: 		}
 L_FSM19:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,137 :: 		break;
@@ -135,9 +133,6 @@ L__FSM107:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,155 :: 		}
 	GOTO        L_FSM28
 L_FSM27:
-;FIRMWARE_SYA_ver_1_0_2_1.c,158 :: 		next_state = 1;
-	MOVLW       1
-	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,159 :: 		}
 L_FSM28:
 L_FSM24:
@@ -180,9 +175,6 @@ L__FSM105:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,177 :: 		}
 	GOTO        L_FSM37
 L_FSM36:
-;FIRMWARE_SYA_ver_1_0_2_1.c,180 :: 		next_state = 2;
-	MOVLW       2
-	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,181 :: 		}
 L_FSM37:
 L_FSM33:
@@ -225,9 +217,6 @@ L__FSM103:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,199 :: 		}
 	GOTO        L_FSM46
 L_FSM45:
-;FIRMWARE_SYA_ver_1_0_2_1.c,202 :: 		next_state = 3;
-	MOVLW       3
-	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,203 :: 		}
 L_FSM46:
 L_FSM42:
@@ -266,9 +255,6 @@ L__FSM101:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,217 :: 		}
 	GOTO        L_FSM55
 L_FSM54:
-;FIRMWARE_SYA_ver_1_0_2_1.c,220 :: 		next_state = 4;
-	MOVLW       4
-	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,221 :: 		}
 L_FSM55:
 L_FSM51:
@@ -318,9 +304,6 @@ L__FSM98:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,233 :: 		}
 	GOTO        L_FSM68
 L_FSM67:
-;FIRMWARE_SYA_ver_1_0_2_1.c,236 :: 		next_state = 5;
-	MOVLW       5
-	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,237 :: 		}
 L_FSM68:
 L_FSM64:
@@ -380,9 +363,6 @@ L__FSM95:
 ;FIRMWARE_SYA_ver_1_0_2_1.c,261 :: 		}
 	GOTO        L_FSM82
 L_FSM81:
-;FIRMWARE_SYA_ver_1_0_2_1.c,264 :: 		next_state = 6;
-	MOVLW       6
-	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,265 :: 		}
 L_FSM82:
 L_FSM78:
@@ -520,6 +500,18 @@ _InitInterrupt:
 	MOVWF       PIE0+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,334 :: 		PIR0 = 0x00;    // Limpiamos la bandera de IOC
 	CLRF        PIR0+0 
+;FIRMWARE_SYA_ver_1_0_2_1.c,335 :: 		T0CON0 = 0x90;
+	MOVLW       144
+	MOVWF       T0CON0+0 
+;FIRMWARE_SYA_ver_1_0_2_1.c,336 :: 		T0CON1 = 0x40;
+	MOVLW       64
+	MOVWF       T0CON1+0 
+;FIRMWARE_SYA_ver_1_0_2_1.c,337 :: 		TMR0H = 0xEC;
+	MOVLW       236
+	MOVWF       TMR0H+0 
+;FIRMWARE_SYA_ver_1_0_2_1.c,338 :: 		TMR0L = 0x78;
+	MOVLW       120
+	MOVWF       TMR0L+0 
 ;FIRMWARE_SYA_ver_1_0_2_1.c,339 :: 		IOCCN = 0x03;   // Activamos las banderas de IOC en Transicion negativa para C0 y C1
 	MOVLW       3
 	MOVWF       IOCCN+0 
