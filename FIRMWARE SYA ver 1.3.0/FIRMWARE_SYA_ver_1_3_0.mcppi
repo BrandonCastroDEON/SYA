@@ -46,7 +46,11 @@ Count=0
 VECTOR_MODE=0
 IVT_BASE=00000008
 [EXPANDED_NODES]
+<<<<<<< HEAD
 0=FIRMWARE_SYA_ver_1_3_0.mcppi
+=======
+31=Sources
+>>>>>>> ddf93fc
 Count=1
 [LIB_EXPANDED_NODES]
 Count=1
