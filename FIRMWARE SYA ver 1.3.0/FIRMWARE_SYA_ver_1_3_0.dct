@@ -1497,14 +1497,8 @@ go_ndone_bit
 go_not_done
 go_not_done_bit
 gt1
-gt1a
 gt2
-gt2a
 gt3
-gt3a
-gt4
-gt5
-gt6
 hadr0
 hadr0_bit
 hadr1

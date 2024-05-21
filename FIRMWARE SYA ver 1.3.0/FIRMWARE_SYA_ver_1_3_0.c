@@ -38,6 +38,17 @@
 #define NOTHING asm{nop} // Do nothing
 #define SLEEP asm{sleep} // Rutina de sleep
 
+typedef enum{
+     s0,
+     s1,
+     s2,
+     s3,
+     s4,
+     s5,
+     s6,
+     s7
+} State;
+
 /*******************************************************************/
 /************************ Variables Globales ***********************/
 /*******************************************************************/
@@ -61,12 +72,6 @@ bit sn_NegEdge_3; // Bandera de señal para transicion negativa en C2
 bit GT1; // Bandera de señal para grupo de trabajo 1
 bit GT2; // Bandera de señal para grupo de trabajo 1
 bit GT3; // Bandera de señal para grupo de trabajo 1
-bit GT1A;
-bit GT2A;
-bit GT3A;
-bit GT4;
-bit GT5;
-bit GT6;
 bit sn_GoTo; // Bandera de señal para señal intermedia
 short unsigned int current_state, next_state;
 
@@ -140,187 +145,149 @@ void main(){
 void FSM(){
      clock0 = 1;
      switch(current_state){
-          case 0: // S0 - Todo apagado
+          case s0: 
                M1 = 0;
                M2 = 0;
                M3 = 0;
                sn_GoTo = 0;
-               // Tenemos señal de flanco positivo 1?
                if((1 == sn_PosEdge_1) && (1 == clock0)){
-                    next_state = 7; // Si, pasamos a estado 6
+                    next_state = s7; 
                }
                else{
                }
                break;
-          case 1: // S1 - Grupo de trabajo 1 110
+          case s1: 
                M1 = 1;
                M2 = 0;
                M3 = 0;
                GT1 = 1;
                GT2 = 0;
                GT3 = 0;
-               // Tenemos señal de flanco negativo 1?
+               
                if((1 == sn_NegEdge_1) && (1 == clock0)){
-                    // Si, pasamos a estado 5
-                    next_state = 0;
-                    //sn_GoTo = 1; // Ponemos en 1 la señal de transicion
+               
+                    next_state = s0;
                }
-               // Tenemos señal de flanco positivo 2?
                else if((1 == sn_PosEdge_2) && (1 == clock0)){
-                    // Si, pasamos a estado 4
-                    next_state = 4;
+                    next_state = s4;
                }
-               // Si no,
                else{
                }
                break;
-          case 2: // S2 - Grupo de trabajo 2 011
+          case s2: 
                M1 = 0;
                M2 = 1;
                M3 = 0;
                GT1 = 0;
                GT2 = 1;
                GT3 = 0;
-               // Tenemos señal de flanco negativo 1?
                if((1 == sn_NegEdge_1) && (1 == clock0)){
-                    // Si, pasamos a estado 5
-                    next_state = 0;
+                    next_state = s0;
                }
-               // Tenemos señal de flanco positivo 2?
                else if((1 == sn_PosEdge_2) && (1 == clock0)){
-                    // Si, pasamos a estado 4
-                    next_state = 4;
+                    next_state = s4;
                }
-               // Si no,
                else{
                }
                break;
-          case 3: // S3 - Grupo de trabajo 3 101
+          case s3: 
                M1 = 0;
                M2 = 0;
                M3 = 1;
                GT1 = 0;
                GT2 = 0;
                GT3 = 1;
-               // Tenemos señal de flanco negativo 1?
                if((1 == sn_NegEdge_1) && (1 == clock0)){
-                    // Si, pasamos a estado 5
-                    next_state = 0;
+                    next_state = s0;
                }
-               // Tenemos señal de flanco positivo 2?
                else if((1 == sn_PosEdge_2) && (1 == clock0)){
-                    // Si, pasamos a estado 4
-                    next_state = 4;
+                    next_state = s4;
                }
-               // Si no,
                else{
                }
                break;
-          case 4: // S4 - Grupo de trabajo 4 111
-               switch(GT1){
-                    case 0:
-                         switch(GT2){
-                              case 0:
-                                   switch(GT3){
-                                        case 0:
-                                             break;
-                                        case 1:
-                                             M1 = 1;
-                                             M2 = 0;
-                                             M3 = 1;
-                                             break;
-                                   }
-                                   break;
-                              case 1:
-                                   M1 = 0;
-                                   M2 = 1;
-                                   M3 = 1;
-                                   break;
-                         }
-                         break;
-                    case 1:
-                         M1 = 1;
-                         M2 = 1;
-                         M3 = 0;
-                         break;
+          case s4:
+               if((1 == GT1) && ((0 == GT2) || (0 == GT3))){
+                    M1 = 1;
+                    M2 = 1;
+                    M3 = 0;
                }
-               // Tenemos señal de flango negativo 2?
+               else if((1 == GT2) && ((0 == GT1) || (0 == GT3))){
+                    M1 = 0;
+                    M2 = 1;
+                    M3 = 1;
+               }
+               else if((1 == GT3) && ((0 == GT1) || (0 == GT2))){
+                    M1 = 1;
+                    M2 = 0;
+                    M3 = 1;
+               }
+               LED = ~LED;
                if((1 == sn_NegEdge_1) && (1 == clock0)){
-                    next_state = 0;
+                    next_state = s0;
                }
                else if((1 == sn_NegEdge_2) && (1 == clock0)){
-                    // Si, pasamos a estado 5
-                    next_state = 1;
-                    sn_GoTo = 1; // Ponemos en 1 la señal de transicion
+                    next_state = s7;
+                    sn_GoTo = 1;
                }
                else if((1 == sn_PosEdge_3) && (1 == clock0)){
-                    next_state = 5; // cambiar
+                    next_state = s5;
                }
-               // Si no,
                else{
                }
                break;
-          case 5:
+          case s5:
                M1 = 1;
                M2 = 1;
                M3 = 1;
                if(((1 == sn_NegEdge_1) || (1 == sn_NegEdge_2)) && (1 == clock0)){
-                    next_state = 0;
+                    next_state = s0;
                }
                else if((1 == sn_NegEdge_3) && (1 == clock0)){
-                    next_state = 6;
+                    next_state = s6;
                }
                else{
                }
                break;
-          case 6: // S5 - Estado de transicion para flanco negativo 2
-               // Tenemos señal de transicion?
+          case s6:
                if((1 == sn_GoTo) && (1 == GT1) && (1 == clock0)){
                     GT2 = 1;
                     GT3 = 0;
                     GT1 = 0;
-                    next_state = 4;
+                    next_state = s4;
                }
                else if((1 == sn_GoTo) && (1 == GT2) && (1 == clock0)){
                     GT2 = 0;
                     GT1 = 0;
                     GT3 = 1;
-                    next_state = 4;
+                    next_state = s4;
                }
                else if((1 == sn_GoTo) && (1 == GT3) && (1 == clock0)){
                     GT1 = 1;
                     GT2 = 0;
                     GT3 = 0;
-                    next_state = 4;
+                    next_state = s4;
                }
-               // Si no,
                else{
                }
                break;
-          case 7: // S6 - Estado de transicion para flanco positivo
+          case s7:
                if(1 == sn_PosEdge_1){
-                    // Tenemos señal de GT1 y GT2 junto con GT3 en 0?
                     if((1 == GT1) && (1 == clock0)){
-                         // Si, pasa a estado 2
-                         next_state = 2;
-                         GT2 = 0; // DO NOT
-                         GT3 = 0; // DELETE !!!!
+                         next_state = s2;
+                         GT2 = 0; 
+                         GT3 = 0; 
                     }
-                    // // Tenemos señal de GT2 y GT1 junto con GT3 en 0?
                     else if((1 == GT2) && (1 == clock0)){
-                         // Si, pasa a estado 3
-                         next_state = 3;
-                         GT1 = 0; // DO NOT
-                         GT3 = 0; // DELETE !!!!
+                         next_state = s3;
+                         GT1 = 0;
+                         GT3 = 0;
                     }
-                    // Tenemos señal de GT3 y GT1 junto con GT2 en 0?
                     else if((1 == GT3) && (1 == clock0)){
-                         // Si, pasa a estado 1
-                         next_state = 1;
-                         GT1 = 0; // DO NOT
-                         GT2 = 0; // DELETE !!!!
+                         next_state = s1;
+                         GT1 = 0; 
+                         GT2 = 0; 
                     }
-                    // Si no,
                     else{
                     }
                }
@@ -329,17 +296,11 @@ void FSM(){
                GT1 = 0;
                GT2 = 0;
                GT3 = 1;
-               GT1A = 1;
-               GT2A = 1;
-               GT3A = 1;
-               GT4 = 0;
-               GT5 = 0;
-               GT6 = 0;
                M1 = 0;
                M2 = 0;
                M3 = 0;
-               current_state = 0;
-               next_state = 0;
+               current_state = s0;
+               next_state = s0;
                break;
      }
 
