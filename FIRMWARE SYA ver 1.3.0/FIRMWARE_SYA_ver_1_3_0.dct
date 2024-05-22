@@ -1598,6 +1598,7 @@ indf1
 indf2
 initinterrupt
 initmcu
+initsystems
 inlvla
 inlvla0
 inlvla0_bit
@@ -2138,6 +2139,12 @@ lsbd1
 lsbd1_bit
 lvdin
 lvdin_bit
+m1off
+m1on
+m2off
+m2on
+m3off
+m3on
 main
 mc1out
 mc1out_bit

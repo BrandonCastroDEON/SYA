@@ -37,13 +37,13 @@
 #define RESET asm{reset} // Por si necesitamos reiniciar el PIC en alguna parte
 #define NOTHING asm{nop} // Do nothing
 #define SLEEP asm{sleep} // Rutina de sleep
-
+/* --FSM States---------------------------------------------------- */
 typedef enum{
-     s0,
-     s1,
-     s2,
-     s3,
-     s4,
+     s0, // S0 Todo apagado
+     s1, // S1 GT1 - 100
+     s2, // S2 GT2 - 010
+     s3, // S3 GT3 - 001
+     s4, // S4 
      s5,
      s6,
      s7
@@ -81,8 +81,15 @@ short unsigned int current_state, next_state;
 
 void InitMCU(); // Configuracion inicial MCU
 void InitInterrupt(); // Configuracion interrupciones MCU
+void InitSystems(); // Inicia sistema
 void FSM(); // FSM
 void Events(); // Rutina de decision sentido de flanco
+void M1On(){M1 = 1;}
+void M1Off(){M1 = 0;}
+void M2On(){M2 = 1;}
+void M2Off(){M2 = 0;}
+void M3On(){M3 = 1;}
+void M3Off(){M3 = 0;}
 
 //*******************************************************************
 // Rutina de interrupcion
@@ -104,16 +111,57 @@ void interrupt(){
      if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
           IOCCF.B0 = 0; // Limpiamos la bandera de IOC
           interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
+          if(1 == interruptC0){
+               // Si, el estado de SWITCH1 es 1?
+               if(1 == SWITCH1){
+                    // Si, ponemos en 0 la señal de flanco positivo 1
+                    sn_PosEdge_1 = 0;
+                    sn_NegEdge_1 = 1;
+               }
+               // Si, el estado de SWITCH1 es 0?
+               else{
+                    // Si, ponemos en 1 la señal de flanco positivo 1
+                    sn_PosEdge_1 = 1;
+                    sn_NegEdge_1 = 0;
+               }
+               interruptC0 = 0; // Limpiamos la bandera de interrupcion en C0
+          }
      }
      // Tenemos bandera de IOC en C1? y el bit de enable en IOC esta en 1?
      if((1 == IOCCF.B1) && (1 == IOCIE_bit)){
           IOCCF.B1 = 0; // Limpiamos la bandera de IOC
           interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
+          // Tenemos señal de bandera de interrupcion en C1?
+          if(1 == interruptC1){
+               // Si, el estado de SWITCH2 es 1?
+               if(1 == SWITCH2){
+                    // Si, ponemos en 0 la señal de flanco positivo 2
+                    sn_PosEdge_2 = 0;
+                    sn_NegEdge_2 = 1;
+               }
+               // Si, el estado de SWITCH2 es 0?
+               else{
+                    // Si, ponemos en 1 la señal de flanco positivo 2
+                    sn_PosEdge_2 = 1;
+                    sn_NegEdge_2 = 0;
+               }
+               interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
+          }
      }
      if((1 == IOCCF.B2) && (1 == IOCIE_bit)){
           IOCCF.B2 = 0; // Limpiamos la bandera de IOC
           interruptC2 = 1; // Ponemos en 1 la bandera de interrupcion en C0
-          LED = ~LED;
+          if(1 == interruptC2){
+               if(1 == SWITCH3){
+                    sn_PosEdge_3 = 0;
+                    sn_NegEdge_3 = 1;
+               }
+               else{
+                    sn_PosEdge_3 = 1;
+                    sn_NegEdge_3 = 0;
+               }
+               interruptC2 = 0;
+          }
      }
 
 }
@@ -124,14 +172,15 @@ void interrupt(){
 
 void main(){
 
-     InitInterrupt(); // MCU interrupt config
-     InitMCU();       // MCU pin/reg config
+     InitSystems();
+
+     LED = ~LED;
 
      do{
-          Events();
      }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
 
      while(1){
+          // Events();
           current_state = next_state; // Maybe move this with Events
           FSM();
      }
@@ -146,9 +195,9 @@ void FSM(){
      clock0 = 1;
      switch(current_state){
           case s0: 
-               M1 = 0;
-               M2 = 0;
-               M3 = 0;
+               M1Off();
+               M2Off();
+               M3Off();
                sn_GoTo = 0;
                if((1 == sn_PosEdge_1) && (1 == clock0)){
                     next_state = s7; 
@@ -157,9 +206,9 @@ void FSM(){
                }
                break;
           case s1: 
-               M1 = 1;
-               M2 = 0;
-               M3 = 0;
+               M1On();
+               M2Off();
+               M3Off();
                GT1 = 1;
                GT2 = 0;
                GT3 = 0;
@@ -175,9 +224,9 @@ void FSM(){
                }
                break;
           case s2: 
-               M1 = 0;
-               M2 = 1;
-               M3 = 0;
+               M1Off();
+               M2On();
+               M3Off();
                GT1 = 0;
                GT2 = 1;
                GT3 = 0;
@@ -191,9 +240,9 @@ void FSM(){
                }
                break;
           case s3: 
-               M1 = 0;
-               M2 = 0;
-               M3 = 1;
+               M1Off();
+               M2Off();
+               M3On();
                GT1 = 0;
                GT2 = 0;
                GT3 = 1;
@@ -207,28 +256,26 @@ void FSM(){
                }
                break;
           case s4:
-               if((1 == GT1) && ((0 == GT2) || (0 == GT3))){
-                    M1 = 1;
-                    M2 = 1;
-                    M3 = 0;
+               if((1 == GT1) && (0 == GT2) && (0 == GT3)){
+                    M1On();
+                    M2On();
+                    M3Off();
                }
-               else if((1 == GT2) && ((0 == GT1) || (0 == GT3))){
-                    M1 = 0;
-                    M2 = 1;
-                    M3 = 1;
+               else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
+                    M1Off();
+                    M2On();
+                    M3On();
                }
-               else if((1 == GT3) && ((0 == GT1) || (0 == GT2))){
-                    M1 = 1;
-                    M2 = 0;
-                    M3 = 1;
+               else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
+                    M1On();
+                    M2Off();
+                    M3On();
                }
-               LED = ~LED;
                if((1 == sn_NegEdge_1) && (1 == clock0)){
                     next_state = s0;
                }
                else if((1 == sn_NegEdge_2) && (1 == clock0)){
                     next_state = s7;
-                    sn_GoTo = 1;
                }
                else if((1 == sn_PosEdge_3) && (1 == clock0)){
                     next_state = s5;
@@ -237,13 +284,14 @@ void FSM(){
                }
                break;
           case s5:
-               M1 = 1;
-               M2 = 1;
-               M3 = 1;
+               M1On();
+               M2On();
+               M3On();
                if(((1 == sn_NegEdge_1) || (1 == sn_NegEdge_2)) && (1 == clock0)){
                     next_state = s0;
                }
                else if((1 == sn_NegEdge_3) && (1 == clock0)){
+                    sn_GoTo = 1;
                     next_state = s6;
                }
                else{
@@ -364,6 +412,15 @@ void Events(){
 }
 
 //*******************************************************************
+// Inicio del sistema
+//*******************************************************************
+
+void InitSystems(){
+     InitInterrupt();
+     InitMCU();
+}
+
+//*******************************************************************
 // Setup bits de configuracion interrupt
 //*******************************************************************
 
@@ -410,8 +467,8 @@ void InitMCU(){
      LATE = 0x00;   //                ''                      E
      LATA = 0x10;   // Dejamos en 1 al pin A4
 
-     WPUC = 0x0F;   // Activamos el pull-up interno de C0 y C1
-     INLVLC = 0x0F; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
+     // WPUC = 0x0F;   // Activamos el pull-up interno de C0 y C1
+     // INLVLC = 0x0F; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
      WPUD = 0x07;   // Activamos el pull-up interno de C0 y C1
      INLVLD = 0x07; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
      CM1CON0 = 0x00; // Desactivamos el comparador 1

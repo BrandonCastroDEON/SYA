@@ -1,7 +1,13 @@
 main
 	__CC2DW
-	InitInterrupt
-	InitMCU
-	Events
+	InitSystems
+		InitInterrupt
+		InitMCU
 	FSM
+		M1Off
+		M2Off
+		M3Off
+		M1On
+		M2On
+		M3On
 interrupt
