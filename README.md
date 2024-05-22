@@ -1,7 +1,8 @@
-## [Sin publicar]
+## [Simultaneo y Alternancia para T.A.D]
 
 TODO
-1.3.0
+
+### Tickets SYA-3, SYA-4
 
 ## [0.1.0]
 
@@ -142,3 +143,68 @@ TODO
 ### Cambios
 
 - Añadidas señales de confirmacion para cambio de estados.
+
+## [0.8.8] - 2024-02-22
+
+### Cambios
+
+- Primera version de SyA para 2 niveles y grupos de trabajo 1n2 (modelo 1 encendido 2 apagados).
+
+## [0.8.9] - 2024-02-22
+
+### Cambios
+
+- Regreso a los grupos de trabajo 2n1 (modelo 2 encendidos y 1 apagado) 
+- Se elimino la funcion State() para evitar saltos entre casos de la FSM.
+
+## [0.8.9.1] 2024-02-23
+
+### Reparado
+
+- Mejor soporte para el debouncing y mejoras a los timers.
+
+## [0.8.9.2] 2024-03-08
+
+### Eliminado
+
+- Se eliminó el modelo de FSM con asignaciones literales
+
+### Añadido
+
+- Se reintegro el uso de una maquina de CodigoGray que genera sets de bits "01", "10", "11" para la toma de deciones de los grupos de trabajo
+
+## [0.8.9.4] 2024-03-11
+
+### Reparado
+
+- Mejoras a la toma de decisiones de la FSM y al llamado con return de la Generadora de Codigo Gray
+
+## [0.8.9.5] 2024-03-12
+
+### Reparado 
+
+- Mejoras a la generacion de codigos Gray.
+
+## [0.8.9.9] 2024-03-26
+
+### Reparado
+
+- Reparado bug que permite el salto entre casos de la FSM.
+
+## [0.8.9] 2024-03-26
+
+### Reparado
+
+- Ahora tenemos multiples señales de confirmacion para el cambio y la puesta en marcha.
+
+## [0.9.0] 2024-03-27
+
+### Reparado
+
+- Reparados bugs con las interrupciones y la perdida de ellas.
+
+## [1.0.0] 2024-03-29
+
+### Cambios
+
+- Se devolvio a una FSM con asignaciones directas
