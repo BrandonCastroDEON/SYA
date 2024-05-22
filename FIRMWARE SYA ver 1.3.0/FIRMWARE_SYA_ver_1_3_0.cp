@@ -16,25 +16,25 @@ typedef enum{
 
 
 
-bit clock0;
-bit interruptC0;
-bit interruptC1;
-bit interruptC2;
+int clock0;
+volatile int interruptC0;
+volatile int interruptC1;
+volatile int interruptC2;
 volatile int counter = 0;
 
 
-bit sn_PosEdge_1;
-bit sn_PosEdge_2;
-bit sn_PosEdge_3;
-bit sn_NegEdge_1;
-bit sn_NegEdge_2;
-bit sn_NegEdge_3;
+int sn_PosEdge_1;
+int sn_PosEdge_2;
+int sn_PosEdge_3;
+int sn_NegEdge_1;
+int sn_NegEdge_2;
+int sn_NegEdge_3;
 
 
-bit GT1;
-bit GT2;
-bit GT3;
-bit sn_GoTo;
+int GT1;
+int GT2;
+int GT3 = 1;
+int sn_GoTo;
 short unsigned int current_state, next_state;
 
 
@@ -62,57 +62,21 @@ void interrupt(){
  if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
  IOCCF.B0 = 0;
  interruptC0 = 1;
- if(1 == interruptC0){
-
- if(1 ==  PORTC.F0 ){
-
- sn_PosEdge_1 = 0;
- sn_NegEdge_1 = 1;
- }
-
- else{
-
- sn_PosEdge_1 = 1;
- sn_NegEdge_1 = 0;
- }
- interruptC0 = 0;
- }
+ Events();
+#line 130 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  }
 
  if((1 == IOCCF.B1) && (1 == IOCIE_bit)){
  IOCCF.B1 = 0;
  interruptC1 = 1;
-
- if(1 == interruptC1){
-
- if(1 ==  PORTC.F1 ){
-
- sn_PosEdge_2 = 0;
- sn_NegEdge_2 = 1;
- }
-
- else{
-
- sn_PosEdge_2 = 1;
- sn_NegEdge_2 = 0;
- }
- interruptC1 = 0;
- }
+ Events();
+#line 152 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  }
  if((1 == IOCCF.B2) && (1 == IOCIE_bit)){
  IOCCF.B2 = 0;
  interruptC2 = 1;
- if(1 == interruptC2){
- if(1 ==  PORTC.F2 ){
- sn_PosEdge_3 = 0;
- sn_NegEdge_3 = 1;
- }
- else{
- sn_PosEdge_3 = 1;
- sn_NegEdge_3 = 0;
- }
- interruptC2 = 0;
- }
+ Events();
+#line 168 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  }
 
 }
@@ -124,8 +88,6 @@ void interrupt(){
 void main(){
 
  InitSystems();
-
-  LATA.F4  = ~ LATA.F4 ;
 
  do{
  }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
@@ -367,8 +329,8 @@ void Events(){
 
 
 void InitSystems(){
- InitInterrupt();
  InitMCU();
+ InitInterrupt();
 }
 
 

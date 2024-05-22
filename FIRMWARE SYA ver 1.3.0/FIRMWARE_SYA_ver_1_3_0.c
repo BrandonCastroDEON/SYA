@@ -54,25 +54,25 @@ typedef enum{
 /*******************************************************************/
 
 // Vector de interrupcion
-bit clock0; // Bandera de reloj
-bit interruptC0; // flag interrupcion en C0
-bit interruptC1; // flag interrupcion en C1
-bit interruptC2; // flag interrupcion en C1
+int clock0; // Bandera de reloj
+volatile int interruptC0; // flag interrupcion en C0
+volatile int interruptC1; // flag interrupcion en C1
+volatile int interruptC2; // flag interrupcion en C1
 volatile int counter = 0; // Contador
 
 // Posiciones del switch
-bit sn_PosEdge_1; // Bandera de señal para transicion positiva en C0
-bit sn_PosEdge_2; // Bandera de señal para transicion positiva en C1
-bit sn_PosEdge_3; // Bandera de señal para transicion positiva en C2
-bit sn_NegEdge_1; // Bandera de señal para transicion negativa en C0
-bit sn_NegEdge_2; // Bandera de señal para transicion negativa en C1
-bit sn_NegEdge_3; // Bandera de señal para transicion negativa en C2
+int sn_PosEdge_1; // Bandera de señal para transicion positiva en C0
+int sn_PosEdge_2; // Bandera de señal para transicion positiva en C1
+int sn_PosEdge_3; // Bandera de señal para transicion positiva en C2
+int sn_NegEdge_1; // Bandera de señal para transicion negativa en C0
+int sn_NegEdge_2; // Bandera de señal para transicion negativa en C1
+int sn_NegEdge_3; // Bandera de señal para transicion negativa en C2
 
 // Maquina de estados
-bit GT1; // Bandera de señal para grupo de trabajo 1
-bit GT2; // Bandera de señal para grupo de trabajo 1
-bit GT3; // Bandera de señal para grupo de trabajo 1
-bit sn_GoTo; // Bandera de señal para señal intermedia
+int GT1; // Bandera de señal para grupo de trabajo 1
+int GT2; // Bandera de señal para grupo de trabajo 1
+int GT3 = 1; // Bandera de señal para grupo de trabajo 1
+int sn_GoTo; // Bandera de señal para señal intermedia
 short unsigned int current_state, next_state;
 
 //*******************************************************************
@@ -111,57 +111,60 @@ void interrupt(){
      if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
           IOCCF.B0 = 0; // Limpiamos la bandera de IOC
           interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
-          if(1 == interruptC0){
-               // Si, el estado de SWITCH1 es 1?
-               if(1 == SWITCH1){
-                    // Si, ponemos en 0 la señal de flanco positivo 1
-                    sn_PosEdge_1 = 0;
-                    sn_NegEdge_1 = 1;
-               }
-               // Si, el estado de SWITCH1 es 0?
-               else{
-                    // Si, ponemos en 1 la señal de flanco positivo 1
-                    sn_PosEdge_1 = 1;
-                    sn_NegEdge_1 = 0;
-               }
-               interruptC0 = 0; // Limpiamos la bandera de interrupcion en C0
-          }
+          Events();
+          // if(1 == interruptC0){
+          //      // Si, el estado de SWITCH1 es 1?
+          //      if(1 == SWITCH1){
+          //           // Si, ponemos en 0 la señal de flanco positivo 1
+          //           sn_PosEdge_1 = 0;
+          //           sn_NegEdge_1 = 1;
+          //      }
+          //      // Si, el estado de SWITCH1 es 0?
+          //      else{
+          //           // Si, ponemos en 1 la señal de flanco positivo 1
+          //           sn_PosEdge_1 = 1;
+          //           sn_NegEdge_1 = 0;
+          //      }
+          //      interruptC0 = 0; // Limpiamos la bandera de interrupcion en C0
+          // }
      }
      // Tenemos bandera de IOC en C1? y el bit de enable en IOC esta en 1?
      if((1 == IOCCF.B1) && (1 == IOCIE_bit)){
           IOCCF.B1 = 0; // Limpiamos la bandera de IOC
           interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
+          Events();
           // Tenemos señal de bandera de interrupcion en C1?
-          if(1 == interruptC1){
-               // Si, el estado de SWITCH2 es 1?
-               if(1 == SWITCH2){
-                    // Si, ponemos en 0 la señal de flanco positivo 2
-                    sn_PosEdge_2 = 0;
-                    sn_NegEdge_2 = 1;
-               }
-               // Si, el estado de SWITCH2 es 0?
-               else{
-                    // Si, ponemos en 1 la señal de flanco positivo 2
-                    sn_PosEdge_2 = 1;
-                    sn_NegEdge_2 = 0;
-               }
-               interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
-          }
+          // if(1 == interruptC1){
+          //      // Si, el estado de SWITCH2 es 1?
+          //      if(1 == SWITCH2){
+          //           // Si, ponemos en 0 la señal de flanco positivo 2
+          //           sn_PosEdge_2 = 0;
+          //           sn_NegEdge_2 = 1;
+          //      }
+          //      // Si, el estado de SWITCH2 es 0?
+          //      else{
+          //           // Si, ponemos en 1 la señal de flanco positivo 2
+          //           sn_PosEdge_2 = 1;
+          //           sn_NegEdge_2 = 0;
+          //      }
+          //      interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
+          // }
      }
      if((1 == IOCCF.B2) && (1 == IOCIE_bit)){
           IOCCF.B2 = 0; // Limpiamos la bandera de IOC
           interruptC2 = 1; // Ponemos en 1 la bandera de interrupcion en C0
-          if(1 == interruptC2){
-               if(1 == SWITCH3){
-                    sn_PosEdge_3 = 0;
-                    sn_NegEdge_3 = 1;
-               }
-               else{
-                    sn_PosEdge_3 = 1;
-                    sn_NegEdge_3 = 0;
-               }
-               interruptC2 = 0;
-          }
+          Events();
+          // if(1 == interruptC2){
+          //      if(1 == SWITCH3){
+          //           sn_PosEdge_3 = 0;
+          //           sn_NegEdge_3 = 1;
+          //      }
+          //      else{
+          //           sn_PosEdge_3 = 1;
+          //           sn_NegEdge_3 = 0;
+          //      }
+          //      interruptC2 = 0;
+          // }
      }
 
 }
@@ -173,8 +176,6 @@ void interrupt(){
 void main(){
 
      InitSystems();
-
-     LED = ~LED;
 
      do{
      }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
@@ -416,8 +417,8 @@ void Events(){
 //*******************************************************************
 
 void InitSystems(){
-     InitInterrupt();
      InitMCU();
+     InitInterrupt();
 }
 
 //*******************************************************************
