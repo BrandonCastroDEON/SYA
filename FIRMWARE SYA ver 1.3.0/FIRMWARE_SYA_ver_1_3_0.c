@@ -166,6 +166,9 @@ void interrupt(){
           //      interruptC2 = 0;
           // }
      }
+     // do{
+     //      Events();
+     // }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
 
 }
 
@@ -177,11 +180,11 @@ void main(){
 
      InitSystems();
 
-     do{
-     }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
+     // do{
+     //      Events();
+     // }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
 
      while(1){
-          // Events();
           current_state = next_state; // Maybe move this with Events
           FSM();
      }
@@ -317,18 +320,12 @@ void FSM(){
           case s7:
                if((1 == GT1) && (1 == clock0)){
                     next_state = s2;
-                    GT2 = 0; 
-                    GT3 = 0; 
                }
                else if((1 == GT2) && (1 == clock0)){
                     next_state = s3;
-                    GT1 = 0;
-                    GT3 = 0;
                }
                else if((1 == GT3) && (1 == clock0)){
                     next_state = s1;
-                    GT1 = 0; 
-                    GT2 = 0; 
                }
                else{
                }

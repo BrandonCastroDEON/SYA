@@ -79,6 +79,9 @@ void interrupt(){
 #line 168 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  }
 
+
+
+
 }
 
 
@@ -89,11 +92,11 @@ void main(){
 
  InitSystems();
 
- do{
- }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
+
+
+
 
  while(1){
-
  current_state = next_state;
  FSM();
  }
@@ -229,18 +232,12 @@ void FSM(){
  case s7:
  if((1 == GT1) && (1 == clock0)){
  next_state = s2;
- GT2 = 0;
- GT3 = 0;
  }
  else if((1 == GT2) && (1 == clock0)){
  next_state = s3;
- GT1 = 0;
- GT3 = 0;
  }
  else if((1 == GT3) && (1 == clock0)){
  next_state = s1;
- GT1 = 0;
- GT2 = 0;
  }
  else{
  }

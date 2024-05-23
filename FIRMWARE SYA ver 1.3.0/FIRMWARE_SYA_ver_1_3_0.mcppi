@@ -49,7 +49,10 @@ IVT_BASE=00000008
 0=FIRMWARE_SYA_ver_1_3_0.mcppi
 Count=1
 [LIB_EXPANDED_NODES]
-Count=1
+0=mikroE Libraries
+1=System Libraries
+2=ADC
+Count=3
 [PROGRAMMER_TYPE]
 Value=mikroE mikroProg
 [CODEGRIP_OPTIONS]
