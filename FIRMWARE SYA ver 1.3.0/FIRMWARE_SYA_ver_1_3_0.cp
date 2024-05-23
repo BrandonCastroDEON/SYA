@@ -184,10 +184,7 @@ void FSM(){
  M2Off();
  M3On();
  }
- if((1 == sn_NegEdge_1) && (1 == clock0)){
- next_state = s0;
- }
- else if((1 == sn_NegEdge_2) && (1 == clock0)){
+ if((1 == sn_NegEdge_2) && (1 == clock0)){
  next_state = s7;
  }
  else if((1 == sn_PosEdge_3) && (1 == clock0)){
@@ -200,10 +197,7 @@ void FSM(){
  M1On();
  M2On();
  M3On();
- if(((1 == sn_NegEdge_1) || (1 == sn_NegEdge_2)) && (1 == clock0)){
- next_state = s0;
- }
- else if((1 == sn_NegEdge_3) && (1 == clock0)){
+ if((1 == sn_NegEdge_3) && (1 == clock0)){
  sn_GoTo = 1;
  next_state = s6;
  }
@@ -233,7 +227,6 @@ void FSM(){
  }
  break;
  case s7:
- if(1 == sn_PosEdge_1){
  if((1 == GT1) && (1 == clock0)){
  next_state = s2;
  GT2 = 0;
@@ -250,7 +243,6 @@ void FSM(){
  GT2 = 0;
  }
  else{
- }
  }
  break;
  default:
