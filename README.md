@@ -208,3 +208,32 @@ TODO
 ### Cambios
 
 - Se devolvio a una FSM con asignaciones directas
+
+## [1.0.1] 2024-03-30
+
+### Reparado
+
+- Se repararon bugs con el debouncing.
+
+## [1.0.2] (Version para Carcamo 2/Bypass) 2024-04-11
+
+### Cambios
+
+- Version final, cambios en la precision de cuando se detecta la interrupcion.
+- Añadido un delay para la deteccion de los cambios de estado.
+
+## [1.0.2.1] (Version para Carcamo 2/Bypass) 2024-04-23
+
+### Cambios
+
+- Alternancia para 1 bomba encendida y 2 apagadas.
+
+## [1.3.0] (Version para Carcamo 2/Bypass) 2024-05-23
+
+### Añadido
+
+- Soporte para 3 niveles.
+
+### Cambios
+
+- FSM ahora soporta alternancia para 1 motor en nivel 1, alternancia para 2 motores en nivel 2 y simultaneo en nivel 3.
