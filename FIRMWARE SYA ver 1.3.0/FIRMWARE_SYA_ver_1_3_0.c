@@ -61,17 +61,17 @@ volatile int interruptC2; // flag interrupcion en C1
 volatile int counter = 0; // Contador
 
 // Posiciones del switch
-int sn_PosEdge_1; // Bandera de señal para transicion positiva en C0
-int sn_PosEdge_2; // Bandera de señal para transicion positiva en C1
-int sn_PosEdge_3; // Bandera de señal para transicion positiva en C2
-int sn_NegEdge_1; // Bandera de señal para transicion negativa en C0
-int sn_NegEdge_2; // Bandera de señal para transicion negativa en C1
-int sn_NegEdge_3; // Bandera de señal para transicion negativa en C2
+bit sn_PosEdge_1; // Bandera de señal para transicion positiva en C0
+bit sn_PosEdge_2; // Bandera de señal para transicion positiva en C1
+bit sn_PosEdge_3; // Bandera de señal para transicion positiva en C2
+bit sn_NegEdge_1; // Bandera de señal para transicion negativa en C0
+bit sn_NegEdge_2; // Bandera de señal para transicion negativa en C1
+bit sn_NegEdge_3; // Bandera de señal para transicion negativa en C2
 
 // Maquina de estados
-int GT1; // Bandera de señal para grupo de trabajo 1
-int GT2; // Bandera de señal para grupo de trabajo 1
-int GT3 = 1; // Bandera de señal para grupo de trabajo 1
+bit GT1; // Bandera de señal para grupo de trabajo 1
+bit GT2; // Bandera de señal para grupo de trabajo 1
+bit GT3; // Bandera de señal para grupo de trabajo 1
 int sn_GoTo; // Bandera de señal para señal intermedia
 short unsigned int current_state, next_state;
 
@@ -185,6 +185,7 @@ void main(){
      // }while((1 == IOCCF.B0) || (1 == IOCCF.B1) || (1 == IOCCF.B2));
 
      while(1){
+          // Events();
           current_state = next_state; // Maybe move this with Events
           FSM();
      }
@@ -199,9 +200,9 @@ void FSM(){
      clock0 = 1;
      switch(current_state){
           case s0: 
-               M1Off();
-               M2Off();
-               M3Off();
+               M1 = 0;
+               M2 = 0;
+               M3 = 0;
                sn_GoTo = 0;
                if((1 == sn_PosEdge_1) && (1 == clock0)){
                     next_state = s7; 
@@ -210,9 +211,9 @@ void FSM(){
                }
                break;
           case s1: 
-               M1On();
-               M2Off();
-               M3Off();
+               M1 = 1;
+               M2 = 0;
+               M3 = 0;
                GT1 = 1;
                GT2 = 0;
                GT3 = 0;
@@ -228,9 +229,9 @@ void FSM(){
                }
                break;
           case s2: 
-               M1Off();
-               M2On();
-               M3Off();
+               M1 = 0;
+               M2 = 1;
+               M3 = 0;
                GT1 = 0;
                GT2 = 1;
                GT3 = 0;
@@ -244,9 +245,9 @@ void FSM(){
                }
                break;
           case s3: 
-               M1Off();
-               M2Off();
-               M3On();
+               M1 = 0;
+               M2 = 0;
+               M3 = 1;
                GT1 = 0;
                GT2 = 0;
                GT3 = 1;
@@ -261,19 +262,19 @@ void FSM(){
                break;
           case s4:
                if((1 == GT1) && (0 == GT2) && (0 == GT3)){
-                    M1On();
-                    M2On();
-                    M3Off();
+                    M1 = 1;
+                    M2 = 1;
+                    M3 = 0;
                }
                else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
-                    M1Off();
-                    M2On();
-                    M3On();
+                    M1 = 0;
+                    M2 = 1;
+                    M3 = 1;
                }
                else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
-                    M1On();
-                    M2Off();
-                    M3On();
+                    M1 = 1;
+                    M2 = 0;
+                    M3 = 1;
                }
                if((1 == sn_NegEdge_2) && (1 == clock0)){
                     next_state = s7;
@@ -285,9 +286,9 @@ void FSM(){
                }
                break;
           case s5:
-               M1On();
-               M2On();
-               M3On();
+               M1 = 1;
+               M2 = 1;
+               M3 = 1;
                if((1 == sn_NegEdge_3) && (1 == clock0)){
                     sn_GoTo = 1;
                     next_state = s6;
@@ -318,16 +319,14 @@ void FSM(){
                }
                break;
           case s7:
-               if((1 == GT1) && (1 == clock0)){
+               if((1 == GT1) && (0 == GT2) && (0 == GT3)){
                     next_state = s2;
                }
-               else if((1 == GT2) && (1 == clock0)){
+               else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
                     next_state = s3;
                }
-               else if((1 == GT3) && (1 == clock0)){
+               else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
                     next_state = s1;
-               }
-               else{
                }
                break;
           default:
@@ -349,6 +348,7 @@ void FSM(){
 //*******************************************************************
 
 void Events(){
+     Delay_ms(100);
      // Tenemos señal de bandera de interrupcion en C0?
      if(1 == interruptC0){
           // Si, el estado de SWITCH1 es 1?
@@ -381,7 +381,7 @@ void Events(){
           }
           interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
      }
-     else if(1 == interruptC2){
+     else if((1 == interruptC2) || (0 == SWITCH3)){
           if(1 == SWITCH3){
                sn_PosEdge_3 = 0;
                sn_NegEdge_3 = 1;
@@ -389,6 +389,7 @@ void Events(){
           else{
                sn_PosEdge_3 = 1;
                sn_NegEdge_3 = 0;
+               next_state = s5;
           }
           interruptC2 = 0;
      }
@@ -463,5 +464,6 @@ void InitMCU(){
      INLVLD = 0x07; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
      CM1CON0 = 0x00; // Desactivamos el comparador 1
      CM2CON0 = 0x00; // Desactivamos el comparador 2
+     GT3 = 1;
 
 }

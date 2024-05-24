@@ -23,17 +23,17 @@ volatile int interruptC2;
 volatile int counter = 0;
 
 
-int sn_PosEdge_1;
-int sn_PosEdge_2;
-int sn_PosEdge_3;
-int sn_NegEdge_1;
-int sn_NegEdge_2;
-int sn_NegEdge_3;
+bit sn_PosEdge_1;
+bit sn_PosEdge_2;
+bit sn_PosEdge_3;
+bit sn_NegEdge_1;
+bit sn_NegEdge_2;
+bit sn_NegEdge_3;
 
 
-int GT1;
-int GT2;
-int GT3 = 1;
+bit GT1;
+bit GT2;
+bit GT3;
 int sn_GoTo;
 short unsigned int current_state, next_state;
 
@@ -97,6 +97,7 @@ void main(){
 
 
  while(1){
+
  current_state = next_state;
  FSM();
  }
@@ -111,9 +112,9 @@ void FSM(){
  clock0 = 1;
  switch(current_state){
  case s0:
- M1Off();
- M2Off();
- M3Off();
+  LATA.F5  = 0;
+  LATE.F0  = 0;
+  LATE.F1  = 0;
  sn_GoTo = 0;
  if((1 == sn_PosEdge_1) && (1 == clock0)){
  next_state = s7;
@@ -122,9 +123,9 @@ void FSM(){
  }
  break;
  case s1:
- M1On();
- M2Off();
- M3Off();
+  LATA.F5  = 1;
+  LATE.F0  = 0;
+  LATE.F1  = 0;
  GT1 = 1;
  GT2 = 0;
  GT3 = 0;
@@ -140,9 +141,9 @@ void FSM(){
  }
  break;
  case s2:
- M1Off();
- M2On();
- M3Off();
+  LATA.F5  = 0;
+  LATE.F0  = 1;
+  LATE.F1  = 0;
  GT1 = 0;
  GT2 = 1;
  GT3 = 0;
@@ -156,9 +157,9 @@ void FSM(){
  }
  break;
  case s3:
- M1Off();
- M2Off();
- M3On();
+  LATA.F5  = 0;
+  LATE.F0  = 0;
+  LATE.F1  = 1;
  GT1 = 0;
  GT2 = 0;
  GT3 = 1;
@@ -173,19 +174,19 @@ void FSM(){
  break;
  case s4:
  if((1 == GT1) && (0 == GT2) && (0 == GT3)){
- M1On();
- M2On();
- M3Off();
+  LATA.F5  = 1;
+  LATE.F0  = 1;
+  LATE.F1  = 0;
  }
  else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
- M1Off();
- M2On();
- M3On();
+  LATA.F5  = 0;
+  LATE.F0  = 1;
+  LATE.F1  = 1;
  }
  else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
- M1On();
- M2Off();
- M3On();
+  LATA.F5  = 1;
+  LATE.F0  = 0;
+  LATE.F1  = 1;
  }
  if((1 == sn_NegEdge_2) && (1 == clock0)){
  next_state = s7;
@@ -197,9 +198,9 @@ void FSM(){
  }
  break;
  case s5:
- M1On();
- M2On();
- M3On();
+  LATA.F5  = 1;
+  LATE.F0  = 1;
+  LATE.F1  = 1;
  if((1 == sn_NegEdge_3) && (1 == clock0)){
  sn_GoTo = 1;
  next_state = s6;
@@ -230,16 +231,14 @@ void FSM(){
  }
  break;
  case s7:
- if((1 == GT1) && (1 == clock0)){
+ if((1 == GT1) && (0 == GT2) && (0 == GT3)){
  next_state = s2;
  }
- else if((1 == GT2) && (1 == clock0)){
+ else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
  next_state = s3;
  }
- else if((1 == GT3) && (1 == clock0)){
+ else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
  next_state = s1;
- }
- else{
  }
  break;
  default:
@@ -261,6 +260,7 @@ void FSM(){
 
 
 void Events(){
+ Delay_ms(100);
 
  if(1 == interruptC0){
 
@@ -293,7 +293,7 @@ void Events(){
  }
  interruptC1 = 0;
  }
- else if(1 == interruptC2){
+ else if((1 == interruptC2) || (0 ==  PORTC.F2 )){
  if(1 ==  PORTC.F2 ){
  sn_PosEdge_3 = 0;
  sn_NegEdge_3 = 1;
@@ -301,6 +301,7 @@ void Events(){
  else{
  sn_PosEdge_3 = 1;
  sn_NegEdge_3 = 0;
+ next_state = s5;
  }
  interruptC2 = 0;
  }
@@ -375,5 +376,6 @@ void InitMCU(){
  INLVLD = 0x07;
  CM1CON0 = 0x00;
  CM2CON0 = 0x00;
+ GT3 = 1;
 
 }

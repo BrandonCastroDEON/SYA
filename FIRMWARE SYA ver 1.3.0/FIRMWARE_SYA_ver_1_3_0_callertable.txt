@@ -4,11 +4,5 @@ main
 		InitMCU
 		InitInterrupt
 	FSM
-		M1Off
-		M2Off
-		M3Off
-		M1On
-		M2On
-		M3On
 interrupt
 	Events
