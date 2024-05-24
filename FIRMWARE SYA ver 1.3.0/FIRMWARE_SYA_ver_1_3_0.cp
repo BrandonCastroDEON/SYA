@@ -322,6 +322,7 @@ void Events(){
 void InitSystems(){
  InitInterrupt();
  InitMCU();
+ Delay_ms(100);
 }
 
 

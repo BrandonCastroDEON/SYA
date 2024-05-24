@@ -55,7 +55,7 @@ _interrupt:
 	GOTO        L_interrupt2
 	BTFSS       IOCIE_bit+0, BitPos(IOCIE_bit+0) 
 	GOTO        L_interrupt2
-L__interrupt113:
+L__interrupt114:
 ;FIRMWARE_SYA_ver_1_3_0.c,112 :: 		IOCCF.B0 = 0; // Limpiamos la bandera de IOC
 	BCF         IOCCF+0, 0 
 ;FIRMWARE_SYA_ver_1_3_0.c,113 :: 		interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
@@ -72,7 +72,7 @@ L_interrupt2:
 	GOTO        L_interrupt5
 	BTFSS       IOCIE_bit+0, BitPos(IOCIE_bit+0) 
 	GOTO        L_interrupt5
-L__interrupt112:
+L__interrupt113:
 ;FIRMWARE_SYA_ver_1_3_0.c,133 :: 		IOCCF.B1 = 0; // Limpiamos la bandera de IOC
 	BCF         IOCCF+0, 1 
 ;FIRMWARE_SYA_ver_1_3_0.c,134 :: 		interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
@@ -89,7 +89,7 @@ L_interrupt5:
 	GOTO        L_interrupt8
 	BTFSS       IOCIE_bit+0, BitPos(IOCIE_bit+0) 
 	GOTO        L_interrupt8
-L__interrupt111:
+L__interrupt112:
 ;FIRMWARE_SYA_ver_1_3_0.c,154 :: 		IOCCF.B2 = 0; // Limpiamos la bandera de IOC
 	BCF         IOCCF+0, 2 
 ;FIRMWARE_SYA_ver_1_3_0.c,155 :: 		interruptC2 = 1; // Ponemos en 1 la bandera de interrupcion en C0
@@ -103,7 +103,7 @@ L__interrupt111:
 L_interrupt8:
 ;FIRMWARE_SYA_ver_1_3_0.c,173 :: 		}
 L_end_interrupt:
-L__interrupt141:
+L__interrupt142:
 	RETFIE      1
 ; end of _interrupt
 
@@ -153,13 +153,13 @@ L_FSM13:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM144
+	GOTO        L__FSM145
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM144:
+L__FSM145:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM16
-L__FSM132:
+L__FSM133:
 ;FIRMWARE_SYA_ver_1_3_0.c,208 :: 		next_state = s7;
 	MOVLW       7
 	MOVWF       _next_state+0 
@@ -190,13 +190,13 @@ L_FSM18:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM145
+	GOTO        L__FSM146
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM145:
+L__FSM146:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM21
-L__FSM131:
+L__FSM132:
 ;FIRMWARE_SYA_ver_1_3_0.c,223 :: 		next_state = s0;
 	CLRF        _next_state+0 
 ;FIRMWARE_SYA_ver_1_3_0.c,224 :: 		}
@@ -208,13 +208,13 @@ L_FSM21:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM146
+	GOTO        L__FSM147
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM146:
+L__FSM147:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM25
-L__FSM130:
+L__FSM131:
 ;FIRMWARE_SYA_ver_1_3_0.c,226 :: 		next_state = s4;
 	MOVLW       4
 	MOVWF       _next_state+0 
@@ -246,13 +246,13 @@ L_FSM27:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM147
+	GOTO        L__FSM148
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM147:
+L__FSM148:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM30
-L__FSM129:
+L__FSM130:
 ;FIRMWARE_SYA_ver_1_3_0.c,239 :: 		next_state = s0;
 	CLRF        _next_state+0 
 ;FIRMWARE_SYA_ver_1_3_0.c,240 :: 		}
@@ -264,13 +264,13 @@ L_FSM30:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM148
+	GOTO        L__FSM149
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM148:
+L__FSM149:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM34
-L__FSM128:
+L__FSM129:
 ;FIRMWARE_SYA_ver_1_3_0.c,242 :: 		next_state = s4;
 	MOVLW       4
 	MOVWF       _next_state+0 
@@ -302,13 +302,13 @@ L_FSM36:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM149
+	GOTO        L__FSM150
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM149:
+L__FSM150:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM39
-L__FSM127:
+L__FSM128:
 ;FIRMWARE_SYA_ver_1_3_0.c,255 :: 		next_state = s0;
 	CLRF        _next_state+0 
 ;FIRMWARE_SYA_ver_1_3_0.c,256 :: 		}
@@ -320,13 +320,13 @@ L_FSM39:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM150
+	GOTO        L__FSM151
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM150:
+L__FSM151:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM43
-L__FSM126:
+L__FSM127:
 ;FIRMWARE_SYA_ver_1_3_0.c,258 :: 		next_state = s4;
 	MOVLW       4
 	MOVWF       _next_state+0 
@@ -347,7 +347,7 @@ L_FSM45:
 	GOTO        L_FSM48
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
 	GOTO        L_FSM48
-L__FSM125:
+L__FSM126:
 ;FIRMWARE_SYA_ver_1_3_0.c,265 :: 		M1 = 1;
 	BSF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_3_0.c,266 :: 		M2 = 1;
@@ -364,7 +364,7 @@ L_FSM48:
 	GOTO        L_FSM52
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
 	GOTO        L_FSM52
-L__FSM124:
+L__FSM125:
 ;FIRMWARE_SYA_ver_1_3_0.c,270 :: 		M1 = 0;
 	BCF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_3_0.c,271 :: 		M2 = 1;
@@ -381,7 +381,7 @@ L_FSM52:
 	GOTO        L_FSM56
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
 	GOTO        L_FSM56
-L__FSM123:
+L__FSM124:
 ;FIRMWARE_SYA_ver_1_3_0.c,275 :: 		M1 = 1;
 	BSF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_3_0.c,276 :: 		M2 = 0;
@@ -398,13 +398,13 @@ L_FSM49:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM151
+	GOTO        L__FSM152
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM151:
+L__FSM152:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM59
-L__FSM122:
+L__FSM123:
 ;FIRMWARE_SYA_ver_1_3_0.c,280 :: 		next_state = s7;
 	MOVLW       7
 	MOVWF       _next_state+0 
@@ -417,13 +417,13 @@ L_FSM59:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM152
+	GOTO        L__FSM153
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM152:
+L__FSM153:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM63
-L__FSM121:
+L__FSM122:
 ;FIRMWARE_SYA_ver_1_3_0.c,283 :: 		next_state = s5;
 	MOVLW       5
 	MOVWF       _next_state+0 
@@ -449,13 +449,13 @@ L_FSM65:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM153
+	GOTO        L__FSM154
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM153:
+L__FSM154:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM68
-L__FSM120:
+L__FSM121:
 ;FIRMWARE_SYA_ver_1_3_0.c,293 :: 		sn_GoTo = 1;
 	MOVLW       1
 	MOVWF       _sn_GoTo+0 
@@ -477,10 +477,10 @@ L_FSM70:
 	MOVLW       0
 	XORWF       _sn_GoTo+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM154
+	GOTO        L__FSM155
 	MOVF        _sn_GoTo+0, 0 
 	XORLW       1
-L__FSM154:
+L__FSM155:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM73
 	BTFSS       _GT1+0, BitPos(_GT1+0) 
@@ -488,13 +488,13 @@ L__FSM154:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM155
+	GOTO        L__FSM156
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM155:
+L__FSM156:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM73
-L__FSM119:
+L__FSM120:
 ;FIRMWARE_SYA_ver_1_3_0.c,301 :: 		GT2 = 1;
 	BSF         _GT2+0, BitPos(_GT2+0) 
 ;FIRMWARE_SYA_ver_1_3_0.c,302 :: 		GT3 = 0;
@@ -511,10 +511,10 @@ L_FSM73:
 	MOVLW       0
 	XORWF       _sn_GoTo+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM156
+	GOTO        L__FSM157
 	MOVF        _sn_GoTo+0, 0 
 	XORLW       1
-L__FSM156:
+L__FSM157:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM77
 	BTFSS       _GT2+0, BitPos(_GT2+0) 
@@ -522,13 +522,13 @@ L__FSM156:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM157
+	GOTO        L__FSM158
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM157:
+L__FSM158:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM77
-L__FSM118:
+L__FSM119:
 ;FIRMWARE_SYA_ver_1_3_0.c,307 :: 		GT2 = 0;
 	BCF         _GT2+0, BitPos(_GT2+0) 
 ;FIRMWARE_SYA_ver_1_3_0.c,308 :: 		GT1 = 0;
@@ -545,10 +545,10 @@ L_FSM77:
 	MOVLW       0
 	XORWF       _sn_GoTo+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM158
+	GOTO        L__FSM159
 	MOVF        _sn_GoTo+0, 0 
 	XORLW       1
-L__FSM158:
+L__FSM159:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM81
 	BTFSS       _GT3+0, BitPos(_GT3+0) 
@@ -556,13 +556,13 @@ L__FSM158:
 	MOVLW       0
 	XORWF       _clock0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__FSM159
+	GOTO        L__FSM160
 	MOVF        _clock0+0, 0 
 	XORLW       1
-L__FSM159:
+L__FSM160:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_FSM81
-L__FSM117:
+L__FSM118:
 ;FIRMWARE_SYA_ver_1_3_0.c,313 :: 		GT1 = 1;
 	BSF         _GT1+0, BitPos(_GT1+0) 
 ;FIRMWARE_SYA_ver_1_3_0.c,314 :: 		GT2 = 0;
@@ -590,7 +590,7 @@ L_FSM83:
 	GOTO        L_FSM86
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
 	GOTO        L_FSM86
-L__FSM116:
+L__FSM117:
 ;FIRMWARE_SYA_ver_1_3_0.c,323 :: 		next_state = s2;
 	MOVLW       2
 	MOVWF       _next_state+0 
@@ -604,7 +604,7 @@ L_FSM86:
 	GOTO        L_FSM90
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
 	GOTO        L_FSM90
-L__FSM115:
+L__FSM116:
 ;FIRMWARE_SYA_ver_1_3_0.c,326 :: 		next_state = s3;
 	MOVLW       3
 	MOVWF       _next_state+0 
@@ -618,7 +618,7 @@ L_FSM90:
 	GOTO        L_FSM94
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
 	GOTO        L_FSM94
-L__FSM114:
+L__FSM115:
 ;FIRMWARE_SYA_ver_1_3_0.c,329 :: 		next_state = s1;
 	MOVLW       1
 	MOVWF       _next_state+0 
@@ -712,10 +712,10 @@ L_Events96:
 	MOVLW       0
 	XORWF       _interruptC0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__Events161
+	GOTO        L__Events162
 	MOVF        _interruptC0+0, 0 
 	XORLW       1
-L__Events161:
+L__Events162:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Events97
 ;FIRMWARE_SYA_ver_1_3_0.c,355 :: 		if(1 == SWITCH1){
@@ -744,10 +744,10 @@ L_Events97:
 	MOVLW       0
 	XORWF       _interruptC1+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__Events162
+	GOTO        L__Events163
 	MOVF        _interruptC1+0, 0 
 	XORLW       1
-L__Events162:
+L__Events163:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Events101
 ;FIRMWARE_SYA_ver_1_3_0.c,371 :: 		if(1 == SWITCH2){
@@ -779,16 +779,16 @@ L_Events101:
 	MOVLW       0
 	XORWF       _interruptC2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__Events163
+	GOTO        L__Events164
 	MOVF        _interruptC2+0, 0 
 	XORLW       1
-L__Events163:
+L__Events164:
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Events133
+	GOTO        L__Events134
 	BTFSS       PORTC+0, 2 
-	GOTO        L__Events133
+	GOTO        L__Events134
 	GOTO        L_Events107
-L__Events133:
+L__Events134:
 ;FIRMWARE_SYA_ver_1_3_0.c,386 :: 		if(1 == SWITCH3){
 	BTFSS       PORTC+0, 2 
 	GOTO        L_Events108
@@ -840,93 +840,109 @@ _InitSystems:
 	CALL        _InitInterrupt+0, 0
 ;FIRMWARE_SYA_ver_1_3_0.c,412 :: 		InitMCU();
 	CALL        _InitMCU+0, 0
-;FIRMWARE_SYA_ver_1_3_0.c,413 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,413 :: 		Delay_ms(100);
+	MOVLW       3
+	MOVWF       R11, 0
+	MOVLW       138
+	MOVWF       R12, 0
+	MOVLW       85
+	MOVWF       R13, 0
+L_InitSystems111:
+	DECFSZ      R13, 1, 1
+	BRA         L_InitSystems111
+	DECFSZ      R12, 1, 1
+	BRA         L_InitSystems111
+	DECFSZ      R11, 1, 1
+	BRA         L_InitSystems111
+	NOP
+	NOP
+;FIRMWARE_SYA_ver_1_3_0.c,414 :: 		}
 L_end_InitSystems:
 	RETURN      0
 ; end of _InitSystems
 
 _InitInterrupt:
 
-;FIRMWARE_SYA_ver_1_3_0.c,419 :: 		void InitInterrupt(){
-;FIRMWARE_SYA_ver_1_3_0.c,421 :: 		PIE0 = 0x30;    // Enable bit de IOC (Interrupt on Change)
+;FIRMWARE_SYA_ver_1_3_0.c,420 :: 		void InitInterrupt(){
+;FIRMWARE_SYA_ver_1_3_0.c,422 :: 		PIE0 = 0x30;    // Enable bit de IOC (Interrupt on Change)
 	MOVLW       48
 	MOVWF       PIE0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,422 :: 		PIR0 = 0x00;    // Limpiamos la bandera de IOC
+;FIRMWARE_SYA_ver_1_3_0.c,423 :: 		PIR0 = 0x00;    // Limpiamos la bandera de IOC
 	CLRF        PIR0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,427 :: 		IOCCN = 0x07;   // Activamos las banderas de IOC en Transicion negativa para C0 y C1
+;FIRMWARE_SYA_ver_1_3_0.c,428 :: 		IOCCN = 0x07;   // Activamos las banderas de IOC en Transicion negativa para C0 y C1
 	MOVLW       7
 	MOVWF       IOCCN+0 
-;FIRMWARE_SYA_ver_1_3_0.c,428 :: 		IOCCP = 0x07;   // Activamos las banderas de IOC en Transicion positiva para C0 y C1
+;FIRMWARE_SYA_ver_1_3_0.c,429 :: 		IOCCP = 0x07;   // Activamos las banderas de IOC en Transicion positiva para C0 y C1
 	MOVLW       7
 	MOVWF       IOCCP+0 
-;FIRMWARE_SYA_ver_1_3_0.c,429 :: 		IOCCF = 0x00;   // Limpiamos la bandera de IOC
+;FIRMWARE_SYA_ver_1_3_0.c,430 :: 		IOCCF = 0x00;   // Limpiamos la bandera de IOC
 	CLRF        IOCCF+0 
-;FIRMWARE_SYA_ver_1_3_0.c,430 :: 		PIR0.TMR0IF = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,431 :: 		PIR0.TMR0IF = 0;
 	BCF         PIR0+0, 5 
-;FIRMWARE_SYA_ver_1_3_0.c,431 :: 		INTCON = 0xC0;  // Activamos bits de interrupt globales (GIE) y por perifericos (PIE)
+;FIRMWARE_SYA_ver_1_3_0.c,432 :: 		INTCON = 0xC0;  // Activamos bits de interrupt globales (GIE) y por perifericos (PIE)
 	MOVLW       192
 	MOVWF       INTCON+0 
-;FIRMWARE_SYA_ver_1_3_0.c,433 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,434 :: 		}
 L_end_InitInterrupt:
 	RETURN      0
 ; end of _InitInterrupt
 
 _InitMCU:
 
-;FIRMWARE_SYA_ver_1_3_0.c,439 :: 		void InitMCU(){
-;FIRMWARE_SYA_ver_1_3_0.c,441 :: 		ADCON0 = 0x08; // Desactivamos ADC
+;FIRMWARE_SYA_ver_1_3_0.c,440 :: 		void InitMCU(){
+;FIRMWARE_SYA_ver_1_3_0.c,442 :: 		ADCON0 = 0x08; // Desactivamos ADC
 	MOVLW       8
 	MOVWF       ADCON0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,442 :: 		ANSELC = 0x00;    // Ponemos en modo digital al puerto C
+;FIRMWARE_SYA_ver_1_3_0.c,443 :: 		ANSELC = 0x00;    // Ponemos en modo digital al puerto C
 	CLRF        ANSELC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,443 :: 		ANSELE = 0x00;    //                ''                 E
+;FIRMWARE_SYA_ver_1_3_0.c,444 :: 		ANSELE = 0x00;    //                ''                 E
 	CLRF        ANSELE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,444 :: 		ANSELA = 0x00;    //                ''                 A
+;FIRMWARE_SYA_ver_1_3_0.c,445 :: 		ANSELA = 0x00;    //                ''                 A
 	CLRF        ANSELA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,445 :: 		ANSELD = 0x00;
+;FIRMWARE_SYA_ver_1_3_0.c,446 :: 		ANSELD = 0x00;
 	CLRF        ANSELD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,447 :: 		TRISC = 0x0F;  // Ponemos en modo de entrada a C0, C1, c2 Y c3, los demas como salida
+;FIRMWARE_SYA_ver_1_3_0.c,448 :: 		TRISC = 0x0F;  // Ponemos en modo de entrada a C0, C1, c2 Y c3, los demas como salida
 	MOVLW       15
 	MOVWF       TRISC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,448 :: 		TRISD = 0x07;  // Ponemos en modo de entrada a D0 y D1
+;FIRMWARE_SYA_ver_1_3_0.c,449 :: 		TRISD = 0x07;  // Ponemos en modo de entrada a D0 y D1
 	MOVLW       7
 	MOVWF       TRISD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,449 :: 		TRISE = 0x00;  // Ponemos en modo salida al puerto E
+;FIRMWARE_SYA_ver_1_3_0.c,450 :: 		TRISE = 0x00;  // Ponemos en modo salida al puerto E
 	CLRF        TRISE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,450 :: 		TRISA = 0x80;  //                ''                A
+;FIRMWARE_SYA_ver_1_3_0.c,451 :: 		TRISA = 0x80;  //                ''                A
 	MOVLW       128
 	MOVWF       TRISA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,452 :: 		PORTC = 0x00;  // Ponemos en linea baja en puerto C
+;FIRMWARE_SYA_ver_1_3_0.c,453 :: 		PORTC = 0x00;  // Ponemos en linea baja en puerto C
 	CLRF        PORTC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,453 :: 		PORTD = 0x00;
+;FIRMWARE_SYA_ver_1_3_0.c,454 :: 		PORTD = 0x00;
 	CLRF        PORTD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,454 :: 		PORTE = 0x00;  //                ''             E
+;FIRMWARE_SYA_ver_1_3_0.c,455 :: 		PORTE = 0x00;  //                ''             E
 	CLRF        PORTE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,455 :: 		PORTA = 0x10;  // Ponemos en linea alta en A4
+;FIRMWARE_SYA_ver_1_3_0.c,456 :: 		PORTA = 0x10;  // Ponemos en linea alta en A4
 	MOVLW       16
 	MOVWF       PORTA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,457 :: 		LATC = 0x00;   // Dejamos en cero el registro del puerto C
+;FIRMWARE_SYA_ver_1_3_0.c,458 :: 		LATC = 0x00;   // Dejamos en cero el registro del puerto C
 	CLRF        LATC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,458 :: 		LATD = 0x00;
+;FIRMWARE_SYA_ver_1_3_0.c,459 :: 		LATD = 0x00;
 	CLRF        LATD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,459 :: 		LATE = 0x00;   //                ''                      E
+;FIRMWARE_SYA_ver_1_3_0.c,460 :: 		LATE = 0x00;   //                ''                      E
 	CLRF        LATE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,460 :: 		LATA = 0x10;   // Dejamos en 1 al pin A4
+;FIRMWARE_SYA_ver_1_3_0.c,461 :: 		LATA = 0x10;   // Dejamos en 1 al pin A4
 	MOVLW       16
 	MOVWF       LATA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,464 :: 		WPUD = 0x07;   // Activamos el pull-up interno de C0 y C1
+;FIRMWARE_SYA_ver_1_3_0.c,465 :: 		WPUD = 0x07;   // Activamos el pull-up interno de C0 y C1
 	MOVLW       7
 	MOVWF       WPUD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,465 :: 		INLVLD = 0x07; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
+;FIRMWARE_SYA_ver_1_3_0.c,466 :: 		INLVLD = 0x07; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
 	MOVLW       7
 	MOVWF       INLVLD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,466 :: 		CM1CON0 = 0x00; // Desactivamos el comparador 1
+;FIRMWARE_SYA_ver_1_3_0.c,467 :: 		CM1CON0 = 0x00; // Desactivamos el comparador 1
 	CLRF        CM1CON0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,467 :: 		CM2CON0 = 0x00; // Desactivamos el comparador 2
+;FIRMWARE_SYA_ver_1_3_0.c,468 :: 		CM2CON0 = 0x00; // Desactivamos el comparador 2
 	CLRF        CM2CON0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,468 :: 		GT3 = 1;
+;FIRMWARE_SYA_ver_1_3_0.c,469 :: 		GT3 = 1;
 	BSF         _GT3+0, BitPos(_GT3+0) 
-;FIRMWARE_SYA_ver_1_3_0.c,470 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,471 :: 		}
 L_end_InitMCU:
 	RETURN      0
 ; end of _InitMCU
