@@ -290,6 +290,7 @@ void Events(){
 
  sn_PosEdge_2 = 1;
  sn_NegEdge_2 = 0;
+ next_state = s4;
  }
  interruptC1 = 0;
  }
@@ -319,8 +320,8 @@ void Events(){
 
 
 void InitSystems(){
- InitMCU();
  InitInterrupt();
+ InitMCU();
 }
 
 

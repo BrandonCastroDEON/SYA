@@ -764,15 +764,18 @@ L_Events102:
 	BSF         _sn_PosEdge_2+0, BitPos(_sn_PosEdge_2+0) 
 ;FIRMWARE_SYA_ver_1_3_0.c,380 :: 		sn_NegEdge_2 = 0;
 	BCF         _sn_NegEdge_2+0, BitPos(_sn_NegEdge_2+0) 
-;FIRMWARE_SYA_ver_1_3_0.c,381 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,381 :: 		next_state = s4;
+	MOVLW       4
+	MOVWF       _next_state+0 
+;FIRMWARE_SYA_ver_1_3_0.c,382 :: 		}
 L_Events103:
-;FIRMWARE_SYA_ver_1_3_0.c,382 :: 		interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
+;FIRMWARE_SYA_ver_1_3_0.c,383 :: 		interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
 	CLRF        _interruptC1+0 
 	CLRF        _interruptC1+1 
-;FIRMWARE_SYA_ver_1_3_0.c,383 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,384 :: 		}
 	GOTO        L_Events104
 L_Events101:
-;FIRMWARE_SYA_ver_1_3_0.c,384 :: 		else if((1 == interruptC2) || (0 == SWITCH3)){
+;FIRMWARE_SYA_ver_1_3_0.c,385 :: 		else if((1 == interruptC2) || (0 == SWITCH3)){
 	MOVLW       0
 	XORWF       _interruptC2+1, 0 
 	BTFSS       STATUS+0, 2 
@@ -786,144 +789,144 @@ L__Events163:
 	GOTO        L__Events133
 	GOTO        L_Events107
 L__Events133:
-;FIRMWARE_SYA_ver_1_3_0.c,385 :: 		if(1 == SWITCH3){
+;FIRMWARE_SYA_ver_1_3_0.c,386 :: 		if(1 == SWITCH3){
 	BTFSS       PORTC+0, 2 
 	GOTO        L_Events108
-;FIRMWARE_SYA_ver_1_3_0.c,386 :: 		sn_PosEdge_3 = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,387 :: 		sn_PosEdge_3 = 0;
 	BCF         _sn_PosEdge_3+0, BitPos(_sn_PosEdge_3+0) 
-;FIRMWARE_SYA_ver_1_3_0.c,387 :: 		sn_NegEdge_3 = 1;
+;FIRMWARE_SYA_ver_1_3_0.c,388 :: 		sn_NegEdge_3 = 1;
 	BSF         _sn_NegEdge_3+0, BitPos(_sn_NegEdge_3+0) 
-;FIRMWARE_SYA_ver_1_3_0.c,388 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,389 :: 		}
 	GOTO        L_Events109
 L_Events108:
-;FIRMWARE_SYA_ver_1_3_0.c,390 :: 		sn_PosEdge_3 = 1;
+;FIRMWARE_SYA_ver_1_3_0.c,391 :: 		sn_PosEdge_3 = 1;
 	BSF         _sn_PosEdge_3+0, BitPos(_sn_PosEdge_3+0) 
-;FIRMWARE_SYA_ver_1_3_0.c,391 :: 		sn_NegEdge_3 = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,392 :: 		sn_NegEdge_3 = 0;
 	BCF         _sn_NegEdge_3+0, BitPos(_sn_NegEdge_3+0) 
-;FIRMWARE_SYA_ver_1_3_0.c,392 :: 		next_state = s5;
+;FIRMWARE_SYA_ver_1_3_0.c,393 :: 		next_state = s5;
 	MOVLW       5
 	MOVWF       _next_state+0 
-;FIRMWARE_SYA_ver_1_3_0.c,393 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,394 :: 		}
 L_Events109:
-;FIRMWARE_SYA_ver_1_3_0.c,394 :: 		interruptC2 = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,395 :: 		interruptC2 = 0;
 	CLRF        _interruptC2+0 
 	CLRF        _interruptC2+1 
-;FIRMWARE_SYA_ver_1_3_0.c,395 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,396 :: 		}
 	GOTO        L_Events110
 L_Events107:
-;FIRMWARE_SYA_ver_1_3_0.c,397 :: 		interruptC0 = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,398 :: 		interruptC0 = 0;
 	CLRF        _interruptC0+0 
 	CLRF        _interruptC0+1 
-;FIRMWARE_SYA_ver_1_3_0.c,398 :: 		interruptC1 = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,399 :: 		interruptC1 = 0;
 	CLRF        _interruptC1+0 
 	CLRF        _interruptC1+1 
-;FIRMWARE_SYA_ver_1_3_0.c,399 :: 		interruptC2 = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,400 :: 		interruptC2 = 0;
 	CLRF        _interruptC2+0 
 	CLRF        _interruptC2+1 
-;FIRMWARE_SYA_ver_1_3_0.c,400 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,401 :: 		}
 L_Events110:
 L_Events104:
 L_Events100:
-;FIRMWARE_SYA_ver_1_3_0.c,401 :: 		return;
-;FIRMWARE_SYA_ver_1_3_0.c,403 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,402 :: 		return;
+;FIRMWARE_SYA_ver_1_3_0.c,404 :: 		}
 L_end_Events:
 	RETURN      0
 ; end of _Events
 
 _InitSystems:
 
-;FIRMWARE_SYA_ver_1_3_0.c,409 :: 		void InitSystems(){
-;FIRMWARE_SYA_ver_1_3_0.c,410 :: 		InitMCU();
-	CALL        _InitMCU+0, 0
+;FIRMWARE_SYA_ver_1_3_0.c,410 :: 		void InitSystems(){
 ;FIRMWARE_SYA_ver_1_3_0.c,411 :: 		InitInterrupt();
 	CALL        _InitInterrupt+0, 0
-;FIRMWARE_SYA_ver_1_3_0.c,412 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,412 :: 		InitMCU();
+	CALL        _InitMCU+0, 0
+;FIRMWARE_SYA_ver_1_3_0.c,413 :: 		}
 L_end_InitSystems:
 	RETURN      0
 ; end of _InitSystems
 
 _InitInterrupt:
 
-;FIRMWARE_SYA_ver_1_3_0.c,418 :: 		void InitInterrupt(){
-;FIRMWARE_SYA_ver_1_3_0.c,420 :: 		PIE0 = 0x30;    // Enable bit de IOC (Interrupt on Change)
+;FIRMWARE_SYA_ver_1_3_0.c,419 :: 		void InitInterrupt(){
+;FIRMWARE_SYA_ver_1_3_0.c,421 :: 		PIE0 = 0x30;    // Enable bit de IOC (Interrupt on Change)
 	MOVLW       48
 	MOVWF       PIE0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,421 :: 		PIR0 = 0x00;    // Limpiamos la bandera de IOC
+;FIRMWARE_SYA_ver_1_3_0.c,422 :: 		PIR0 = 0x00;    // Limpiamos la bandera de IOC
 	CLRF        PIR0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,426 :: 		IOCCN = 0x07;   // Activamos las banderas de IOC en Transicion negativa para C0 y C1
+;FIRMWARE_SYA_ver_1_3_0.c,427 :: 		IOCCN = 0x07;   // Activamos las banderas de IOC en Transicion negativa para C0 y C1
 	MOVLW       7
 	MOVWF       IOCCN+0 
-;FIRMWARE_SYA_ver_1_3_0.c,427 :: 		IOCCP = 0x07;   // Activamos las banderas de IOC en Transicion positiva para C0 y C1
+;FIRMWARE_SYA_ver_1_3_0.c,428 :: 		IOCCP = 0x07;   // Activamos las banderas de IOC en Transicion positiva para C0 y C1
 	MOVLW       7
 	MOVWF       IOCCP+0 
-;FIRMWARE_SYA_ver_1_3_0.c,428 :: 		IOCCF = 0x00;   // Limpiamos la bandera de IOC
+;FIRMWARE_SYA_ver_1_3_0.c,429 :: 		IOCCF = 0x00;   // Limpiamos la bandera de IOC
 	CLRF        IOCCF+0 
-;FIRMWARE_SYA_ver_1_3_0.c,429 :: 		PIR0.TMR0IF = 0;
+;FIRMWARE_SYA_ver_1_3_0.c,430 :: 		PIR0.TMR0IF = 0;
 	BCF         PIR0+0, 5 
-;FIRMWARE_SYA_ver_1_3_0.c,430 :: 		INTCON = 0xC0;  // Activamos bits de interrupt globales (GIE) y por perifericos (PIE)
+;FIRMWARE_SYA_ver_1_3_0.c,431 :: 		INTCON = 0xC0;  // Activamos bits de interrupt globales (GIE) y por perifericos (PIE)
 	MOVLW       192
 	MOVWF       INTCON+0 
-;FIRMWARE_SYA_ver_1_3_0.c,432 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,433 :: 		}
 L_end_InitInterrupt:
 	RETURN      0
 ; end of _InitInterrupt
 
 _InitMCU:
 
-;FIRMWARE_SYA_ver_1_3_0.c,438 :: 		void InitMCU(){
-;FIRMWARE_SYA_ver_1_3_0.c,440 :: 		ADCON0 = 0x08; // Desactivamos ADC
+;FIRMWARE_SYA_ver_1_3_0.c,439 :: 		void InitMCU(){
+;FIRMWARE_SYA_ver_1_3_0.c,441 :: 		ADCON0 = 0x08; // Desactivamos ADC
 	MOVLW       8
 	MOVWF       ADCON0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,441 :: 		ANSELC = 0x00;    // Ponemos en modo digital al puerto C
+;FIRMWARE_SYA_ver_1_3_0.c,442 :: 		ANSELC = 0x00;    // Ponemos en modo digital al puerto C
 	CLRF        ANSELC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,442 :: 		ANSELE = 0x00;    //                ''                 E
+;FIRMWARE_SYA_ver_1_3_0.c,443 :: 		ANSELE = 0x00;    //                ''                 E
 	CLRF        ANSELE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,443 :: 		ANSELA = 0x00;    //                ''                 A
+;FIRMWARE_SYA_ver_1_3_0.c,444 :: 		ANSELA = 0x00;    //                ''                 A
 	CLRF        ANSELA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,444 :: 		ANSELD = 0x00;
+;FIRMWARE_SYA_ver_1_3_0.c,445 :: 		ANSELD = 0x00;
 	CLRF        ANSELD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,446 :: 		TRISC = 0x0F;  // Ponemos en modo de entrada a C0, C1, c2 Y c3, los demas como salida
+;FIRMWARE_SYA_ver_1_3_0.c,447 :: 		TRISC = 0x0F;  // Ponemos en modo de entrada a C0, C1, c2 Y c3, los demas como salida
 	MOVLW       15
 	MOVWF       TRISC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,447 :: 		TRISD = 0x07;  // Ponemos en modo de entrada a D0 y D1
+;FIRMWARE_SYA_ver_1_3_0.c,448 :: 		TRISD = 0x07;  // Ponemos en modo de entrada a D0 y D1
 	MOVLW       7
 	MOVWF       TRISD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,448 :: 		TRISE = 0x00;  // Ponemos en modo salida al puerto E
+;FIRMWARE_SYA_ver_1_3_0.c,449 :: 		TRISE = 0x00;  // Ponemos en modo salida al puerto E
 	CLRF        TRISE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,449 :: 		TRISA = 0x80;  //                ''                A
+;FIRMWARE_SYA_ver_1_3_0.c,450 :: 		TRISA = 0x80;  //                ''                A
 	MOVLW       128
 	MOVWF       TRISA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,451 :: 		PORTC = 0x00;  // Ponemos en linea baja en puerto C
+;FIRMWARE_SYA_ver_1_3_0.c,452 :: 		PORTC = 0x00;  // Ponemos en linea baja en puerto C
 	CLRF        PORTC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,452 :: 		PORTD = 0x00;
+;FIRMWARE_SYA_ver_1_3_0.c,453 :: 		PORTD = 0x00;
 	CLRF        PORTD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,453 :: 		PORTE = 0x00;  //                ''             E
+;FIRMWARE_SYA_ver_1_3_0.c,454 :: 		PORTE = 0x00;  //                ''             E
 	CLRF        PORTE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,454 :: 		PORTA = 0x10;  // Ponemos en linea alta en A4
+;FIRMWARE_SYA_ver_1_3_0.c,455 :: 		PORTA = 0x10;  // Ponemos en linea alta en A4
 	MOVLW       16
 	MOVWF       PORTA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,456 :: 		LATC = 0x00;   // Dejamos en cero el registro del puerto C
+;FIRMWARE_SYA_ver_1_3_0.c,457 :: 		LATC = 0x00;   // Dejamos en cero el registro del puerto C
 	CLRF        LATC+0 
-;FIRMWARE_SYA_ver_1_3_0.c,457 :: 		LATD = 0x00;
+;FIRMWARE_SYA_ver_1_3_0.c,458 :: 		LATD = 0x00;
 	CLRF        LATD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,458 :: 		LATE = 0x00;   //                ''                      E
+;FIRMWARE_SYA_ver_1_3_0.c,459 :: 		LATE = 0x00;   //                ''                      E
 	CLRF        LATE+0 
-;FIRMWARE_SYA_ver_1_3_0.c,459 :: 		LATA = 0x10;   // Dejamos en 1 al pin A4
+;FIRMWARE_SYA_ver_1_3_0.c,460 :: 		LATA = 0x10;   // Dejamos en 1 al pin A4
 	MOVLW       16
 	MOVWF       LATA+0 
-;FIRMWARE_SYA_ver_1_3_0.c,463 :: 		WPUD = 0x07;   // Activamos el pull-up interno de C0 y C1
+;FIRMWARE_SYA_ver_1_3_0.c,464 :: 		WPUD = 0x07;   // Activamos el pull-up interno de C0 y C1
 	MOVLW       7
 	MOVWF       WPUD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,464 :: 		INLVLD = 0x07; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
+;FIRMWARE_SYA_ver_1_3_0.c,465 :: 		INLVLD = 0x07; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
 	MOVLW       7
 	MOVWF       INLVLD+0 
-;FIRMWARE_SYA_ver_1_3_0.c,465 :: 		CM1CON0 = 0x00; // Desactivamos el comparador 1
+;FIRMWARE_SYA_ver_1_3_0.c,466 :: 		CM1CON0 = 0x00; // Desactivamos el comparador 1
 	CLRF        CM1CON0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,466 :: 		CM2CON0 = 0x00; // Desactivamos el comparador 2
+;FIRMWARE_SYA_ver_1_3_0.c,467 :: 		CM2CON0 = 0x00; // Desactivamos el comparador 2
 	CLRF        CM2CON0+0 
-;FIRMWARE_SYA_ver_1_3_0.c,467 :: 		GT3 = 1;
+;FIRMWARE_SYA_ver_1_3_0.c,468 :: 		GT3 = 1;
 	BSF         _GT3+0, BitPos(_GT3+0) 
-;FIRMWARE_SYA_ver_1_3_0.c,469 :: 		}
+;FIRMWARE_SYA_ver_1_3_0.c,470 :: 		}
 L_end_InitMCU:
 	RETURN      0
 ; end of _InitMCU

@@ -1,8 +1,8 @@
 main
 	__CC2DW
 	InitSystems
-		InitMCU
 		InitInterrupt
+		InitMCU
 	FSM
 interrupt
 	Events

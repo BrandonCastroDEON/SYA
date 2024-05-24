@@ -378,6 +378,7 @@ void Events(){
                // Si, ponemos en 1 la señal de flanco positivo 2
                sn_PosEdge_2 = 1;
                sn_NegEdge_2 = 0;
+               next_state = s4;
           }
           interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
      }
@@ -407,8 +408,8 @@ void Events(){
 //*******************************************************************
 
 void InitSystems(){
-     InitMCU();
      InitInterrupt();
+     InitMCU();
 }
 
 //*******************************************************************
