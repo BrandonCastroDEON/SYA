@@ -58,7 +58,18 @@ void M3Off(){ LATE.F1  = 0;}
 
 
 void interrupt(){
-#line 111 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
+
+ if(PIR0.TMR0IF){
+ TMR0H = 0x3C;
+ TMR0L = 0xB0;
+ PIR0.TMR0IF = 0;
+ counter++;
+ if(counter >= 100){
+  LATA.F4  = ~ LATA.F4 ;
+ Events();
+ counter = 0;
+ }
+ }
  if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
  IOCCF.B0 = 0;
  interruptC0 = 1;
@@ -72,11 +83,12 @@ void interrupt(){
  Events();
 #line 152 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  }
+
  if((1 == IOCCF.B2) && (1 == IOCIE_bit)){
  IOCCF.B2 = 0;
  interruptC2 = 1;
  Events();
-#line 168 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
+#line 169 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  }
 
 
@@ -262,28 +274,25 @@ void FSM(){
 void Events(){
  Delay_ms(100);
 
- if(1 == interruptC0){
-
  if(1 ==  PORTC.F0 ){
 
  sn_PosEdge_1 = 0;
  sn_NegEdge_1 = 1;
+ interruptC0 = 0;
  }
 
  else{
 
  sn_PosEdge_1 = 1;
  sn_NegEdge_1 = 0;
- }
  interruptC0 = 0;
  }
-
- else if(1 == interruptC1){
 
  if(1 ==  PORTC.F1 ){
 
  sn_PosEdge_2 = 0;
  sn_NegEdge_2 = 1;
+ interruptC1 = 0;
  }
 
  else{
@@ -291,24 +300,17 @@ void Events(){
  sn_PosEdge_2 = 1;
  sn_NegEdge_2 = 0;
  next_state = s4;
- }
  interruptC1 = 0;
  }
- else if((1 == interruptC2) || (0 ==  PORTC.F2 )){
  if(1 ==  PORTC.F2 ){
  sn_PosEdge_3 = 0;
  sn_NegEdge_3 = 1;
+ interruptC2 = 0;
  }
  else{
  sn_PosEdge_3 = 1;
  sn_NegEdge_3 = 0;
  next_state = s5;
- }
- interruptC2 = 0;
- }
- else{
- interruptC0 = 0;
- interruptC1 = 0;
  interruptC2 = 0;
  }
  return;
@@ -322,7 +324,6 @@ void Events(){
 void InitSystems(){
  InitInterrupt();
  InitMCU();
- Delay_ms(100);
 }
 
 
@@ -333,10 +334,10 @@ void InitInterrupt(){
 
  PIE0 = 0x30;
  PIR0 = 0x00;
-
-
-
-
+ T0CON0 = 0x90;
+ T0CON1 = 0x40;
+ TMR0H = 0x3C;
+ TMR0L = 0xB0;
  IOCCN = 0x07;
  IOCCP = 0x07;
  IOCCF = 0x00;
@@ -379,5 +380,6 @@ void InitMCU(){
  CM1CON0 = 0x00;
  CM2CON0 = 0x00;
  GT3 = 1;
+ Delay_ms(200);
 
 }

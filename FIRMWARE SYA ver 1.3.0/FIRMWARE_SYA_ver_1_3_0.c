@@ -97,17 +97,17 @@ void M3Off(){M3 = 0;}
 
 void interrupt(){
 
-     // if(PIR0.TMR0IF){
-     //      TMR0H = 0x3C;      // Timer para cada segundo y medio?
-     //      TMR0L = 0xB0;      //
-     //      PIR0.TMR0IF = 0;
-     //      counter++;
-     //      if(counter >= 5){
-     //           clock0 = 1;
-     //           counter = 0;
-     //      }
-     // }
-     // Tenemos bandera de IOC en C0? y el bit de enable en IOC esta en 1?
+     if(PIR0.TMR0IF){
+          TMR0H = 0x3C;      // Timer para cada segundo y medio?
+          TMR0L = 0xB0;      //
+          PIR0.TMR0IF = 0;
+          counter++;
+          if(counter >= 100){
+               LED = ~LED;
+               Events();
+               counter = 0;
+          }
+     }
      if((1 == IOCCF.B0) && (1 == IOCIE_bit)){
           IOCCF.B0 = 0; // Limpiamos la bandera de IOC
           interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
@@ -150,6 +150,7 @@ void interrupt(){
           //      interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
           // }
      }
+     // Tenemos bandera de IOC en C0? y el bit de enable en IOC esta en 1?
      if((1 == IOCCF.B2) && (1 == IOCIE_bit)){
           IOCCF.B2 = 0; // Limpiamos la bandera de IOC
           interruptC2 = 1; // Ponemos en 1 la bandera de interrupcion en C0
@@ -349,29 +350,26 @@ void FSM(){
 
 void Events(){
      Delay_ms(100);
-     // Tenemos señal de bandera de interrupcion en C0?
-     if(1 == interruptC0){
           // Si, el estado de SWITCH1 es 1?
           if(1 == SWITCH1){
                // Si, ponemos en 0 la señal de flanco positivo 1
                sn_PosEdge_1 = 0;
                sn_NegEdge_1 = 1;
+          interruptC0 = 0; // Limpiamos la bandera de interrupcion en C0
           }
           // Si, el estado de SWITCH1 es 0?
           else{
                // Si, ponemos en 1 la señal de flanco positivo 1
                sn_PosEdge_1 = 1;
                sn_NegEdge_1 = 0;
-          }
           interruptC0 = 0; // Limpiamos la bandera de interrupcion en C0
-     }
-     // Tenemos señal de bandera de interrupcion en C1?
-     else if(1 == interruptC1){
+          }
           // Si, el estado de SWITCH2 es 1?
           if(1 == SWITCH2){
                // Si, ponemos en 0 la señal de flanco positivo 2
                sn_PosEdge_2 = 0;
                sn_NegEdge_2 = 1;
+          interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
           }
           // Si, el estado de SWITCH2 es 0?
           else{
@@ -379,26 +377,19 @@ void Events(){
                sn_PosEdge_2 = 1;
                sn_NegEdge_2 = 0;
                next_state = s4;
-          }
           interruptC1 = 0; // Limpiamos la bandera de interrupcion en C1
-     }
-     else if((1 == interruptC2) || (0 == SWITCH3)){
+          }
           if(1 == SWITCH3){
                sn_PosEdge_3 = 0;
                sn_NegEdge_3 = 1;
+          interruptC2 = 0;
           }
           else{
                sn_PosEdge_3 = 1;
                sn_NegEdge_3 = 0;
                next_state = s5;
+          interruptC2 = 0;
           }
-          interruptC2 = 0;
-     }
-     else{
-          interruptC0 = 0;
-          interruptC1 = 0;
-          interruptC2 = 0;
-     }
      return;
 
 }
@@ -410,7 +401,6 @@ void Events(){
 void InitSystems(){
      InitInterrupt();
      InitMCU();
-     Delay_ms(100);
 }
 
 //*******************************************************************
@@ -421,10 +411,10 @@ void InitInterrupt(){
 
      PIE0 = 0x30;    // Enable bit de IOC (Interrupt on Change)
      PIR0 = 0x00;    // Limpiamos la bandera de IOC
-     // T0CON0 = 0x90;
-     // T0CON1 = 0x40;
-     // TMR0H = 0x3C;
-     // TMR0L = 0xB0;
+     T0CON0 = 0x90;
+     T0CON1 = 0x40;
+     TMR0H = 0x3C;
+     TMR0L = 0xB0;
      IOCCN = 0x07;   // Activamos las banderas de IOC en Transicion negativa para C0 y C1
      IOCCP = 0x07;   // Activamos las banderas de IOC en Transicion positiva para C0 y C1
      IOCCF = 0x00;   // Limpiamos la bandera de IOC
@@ -467,5 +457,6 @@ void InitMCU(){
      CM1CON0 = 0x00; // Desactivamos el comparador 1
      CM2CON0 = 0x00; // Desactivamos el comparador 2
      GT3 = 1;
+     Delay_ms(200);
 
 }
