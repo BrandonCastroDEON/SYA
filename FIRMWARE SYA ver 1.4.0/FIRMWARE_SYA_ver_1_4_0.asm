@@ -79,10 +79,10 @@ _interrupt:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__interrupt97
+	GOTO        L__interrupt91
 	MOVLW       200
 	SUBWF       _counter+0, 0 
-L__interrupt97:
+L__interrupt91:
 	BTFSS       STATUS+0, 0 
 	GOTO        L_interrupt1
 ;FIRMWARE_SYA_ver_1_4_0.c,106 :: 		LED = ~LED;
@@ -120,12 +120,12 @@ L_interrupt2:
 	MOVWF       _interruptC1+0 
 	MOVLW       0
 	MOVWF       _interruptC1+1 
-;FIRMWARE_SYA_ver_1_4_0.c,133 :: 		Delay_ms(100);
-	MOVLW       3
+;FIRMWARE_SYA_ver_1_4_0.c,133 :: 		Delay_ms(500);
+	MOVLW       13
 	MOVWF       R11, 0
-	MOVLW       138
+	MOVLW       175
 	MOVWF       R12, 0
-	MOVLW       85
+	MOVLW       182
 	MOVWF       R13, 0
 L_interrupt4:
 	DECFSZ      R13, 1, 1
@@ -134,7 +134,6 @@ L_interrupt4:
 	BRA         L_interrupt4
 	DECFSZ      R11, 1, 1
 	BRA         L_interrupt4
-	NOP
 	NOP
 ;FIRMWARE_SYA_ver_1_4_0.c,134 :: 		if(1 == SWITCH1){
 	BTFSS       PORTC+0, 1 
@@ -177,7 +176,7 @@ L_interrupt3:
 L_interrupt7:
 ;FIRMWARE_SYA_ver_1_4_0.c,166 :: 		}
 L_end_interrupt:
-L__interrupt96:
+L__interrupt90:
 	RETFIE      1
 ; end of _interrupt
 
@@ -248,22 +247,12 @@ L_FSM15:
 ;FIRMWARE_SYA_ver_1_4_0.c,210 :: 		}
 	GOTO        L_FSM17
 L_FSM16:
-;FIRMWARE_SYA_ver_1_4_0.c,211 :: 		else if(1 == sn_PosEdge_2){
-	BTFSS       _sn_PosEdge_2+0, BitPos(_sn_PosEdge_2+0) 
-	GOTO        L_FSM18
-;FIRMWARE_SYA_ver_1_4_0.c,212 :: 		next_state = s4;
-	MOVLW       4
-	MOVWF       _next_state+0 
-;FIRMWARE_SYA_ver_1_4_0.c,213 :: 		}
-	GOTO        L_FSM19
-L_FSM18:
 ;FIRMWARE_SYA_ver_1_4_0.c,215 :: 		}
-L_FSM19:
 L_FSM17:
 ;FIRMWARE_SYA_ver_1_4_0.c,216 :: 		break;
 	GOTO        L_FSM11
 ;FIRMWARE_SYA_ver_1_4_0.c,217 :: 		case s2:
-L_FSM20:
+L_FSM18:
 ;FIRMWARE_SYA_ver_1_4_0.c,218 :: 		M1 = 0;
 	BCF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_4_0.c,219 :: 		M2 = 1;
@@ -278,28 +267,18 @@ L_FSM20:
 	BCF         _GT3+0, BitPos(_GT3+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,224 :: 		if(1 == sn_NegEdge_1){
 	BTFSS       _sn_NegEdge_1+0, BitPos(_sn_NegEdge_1+0) 
-	GOTO        L_FSM21
+	GOTO        L_FSM19
 ;FIRMWARE_SYA_ver_1_4_0.c,225 :: 		next_state = s0;
 	CLRF        _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,226 :: 		}
-	GOTO        L_FSM22
-L_FSM21:
-;FIRMWARE_SYA_ver_1_4_0.c,227 :: 		else if(1 == sn_PosEdge_2){
-	BTFSS       _sn_PosEdge_2+0, BitPos(_sn_PosEdge_2+0) 
-	GOTO        L_FSM23
-;FIRMWARE_SYA_ver_1_4_0.c,228 :: 		next_state = s4;
-	MOVLW       4
-	MOVWF       _next_state+0 
-;FIRMWARE_SYA_ver_1_4_0.c,229 :: 		}
-	GOTO        L_FSM24
-L_FSM23:
+	GOTO        L_FSM20
+L_FSM19:
 ;FIRMWARE_SYA_ver_1_4_0.c,231 :: 		}
-L_FSM24:
-L_FSM22:
+L_FSM20:
 ;FIRMWARE_SYA_ver_1_4_0.c,232 :: 		break;
 	GOTO        L_FSM11
 ;FIRMWARE_SYA_ver_1_4_0.c,233 :: 		case s3:
-L_FSM25:
+L_FSM21:
 ;FIRMWARE_SYA_ver_1_4_0.c,234 :: 		M1 = 0;
 	BCF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_4_0.c,235 :: 		M2 = 0;
@@ -314,36 +293,26 @@ L_FSM25:
 	BSF         _GT3+0, BitPos(_GT3+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,240 :: 		if(1 == sn_NegEdge_1){
 	BTFSS       _sn_NegEdge_1+0, BitPos(_sn_NegEdge_1+0) 
-	GOTO        L_FSM26
+	GOTO        L_FSM22
 ;FIRMWARE_SYA_ver_1_4_0.c,241 :: 		next_state = s0;
 	CLRF        _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,242 :: 		}
-	GOTO        L_FSM27
-L_FSM26:
-;FIRMWARE_SYA_ver_1_4_0.c,243 :: 		else if(1 == sn_PosEdge_2){
-	BTFSS       _sn_PosEdge_2+0, BitPos(_sn_PosEdge_2+0) 
-	GOTO        L_FSM28
-;FIRMWARE_SYA_ver_1_4_0.c,244 :: 		next_state = s4;
-	MOVLW       4
-	MOVWF       _next_state+0 
-;FIRMWARE_SYA_ver_1_4_0.c,245 :: 		}
-	GOTO        L_FSM29
-L_FSM28:
+	GOTO        L_FSM23
+L_FSM22:
 ;FIRMWARE_SYA_ver_1_4_0.c,247 :: 		}
-L_FSM29:
-L_FSM27:
+L_FSM23:
 ;FIRMWARE_SYA_ver_1_4_0.c,248 :: 		break;
 	GOTO        L_FSM11
 ;FIRMWARE_SYA_ver_1_4_0.c,249 :: 		case s4:
-L_FSM30:
+L_FSM24:
 ;FIRMWARE_SYA_ver_1_4_0.c,250 :: 		if((1 == GT1) && (0 == GT2) && (0 == GT3)){
 	BTFSS       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM33
+	GOTO        L_FSM27
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM33
+	GOTO        L_FSM27
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM33
-L__FSM88:
+	GOTO        L_FSM27
+L__FSM82:
 ;FIRMWARE_SYA_ver_1_4_0.c,251 :: 		M1 = 1;
 	BSF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_4_0.c,252 :: 		M2 = 1;
@@ -355,16 +324,16 @@ L__FSM88:
 ;FIRMWARE_SYA_ver_1_4_0.c,255 :: 		GT3 = 0;
 	BCF         _GT3+0, BitPos(_GT3+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,256 :: 		}
-	GOTO        L_FSM34
-L_FSM33:
+	GOTO        L_FSM28
+L_FSM27:
 ;FIRMWARE_SYA_ver_1_4_0.c,257 :: 		else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
 	BTFSS       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM37
+	GOTO        L_FSM31
 	BTFSC       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM37
+	GOTO        L_FSM31
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM37
-L__FSM87:
+	GOTO        L_FSM31
+L__FSM81:
 ;FIRMWARE_SYA_ver_1_4_0.c,258 :: 		M1 = 0;
 	BCF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_4_0.c,259 :: 		M2 = 1;
@@ -376,16 +345,16 @@ L__FSM87:
 ;FIRMWARE_SYA_ver_1_4_0.c,262 :: 		GT3 = 0;
 	BCF         _GT3+0, BitPos(_GT3+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,263 :: 		}
-	GOTO        L_FSM38
-L_FSM37:
+	GOTO        L_FSM32
+L_FSM31:
 ;FIRMWARE_SYA_ver_1_4_0.c,264 :: 		else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
 	BTFSS       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM41
+	GOTO        L_FSM35
 	BTFSC       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM41
+	GOTO        L_FSM35
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM41
-L__FSM86:
+	GOTO        L_FSM35
+L__FSM80:
 ;FIRMWARE_SYA_ver_1_4_0.c,265 :: 		M1 = 1;
 	BSF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_4_0.c,266 :: 		M2 = 0;
@@ -397,34 +366,34 @@ L__FSM86:
 ;FIRMWARE_SYA_ver_1_4_0.c,269 :: 		GT2 = 0;
 	BCF         _GT2+0, BitPos(_GT2+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,270 :: 		}
-L_FSM41:
-L_FSM38:
-L_FSM34:
+L_FSM35:
+L_FSM32:
+L_FSM28:
 ;FIRMWARE_SYA_ver_1_4_0.c,271 :: 		if(1 == sn_NegEdge_2){
 	BTFSS       _sn_NegEdge_2+0, BitPos(_sn_NegEdge_2+0) 
-	GOTO        L_FSM42
+	GOTO        L_FSM36
 ;FIRMWARE_SYA_ver_1_4_0.c,272 :: 		next_state = s7;
 	MOVLW       7
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,273 :: 		}
-	GOTO        L_FSM43
-L_FSM42:
+	GOTO        L_FSM37
+L_FSM36:
 ;FIRMWARE_SYA_ver_1_4_0.c,274 :: 		else if(1 == sn_PosEdge_3){
 	BTFSS       _sn_PosEdge_3+0, BitPos(_sn_PosEdge_3+0) 
-	GOTO        L_FSM44
+	GOTO        L_FSM38
 ;FIRMWARE_SYA_ver_1_4_0.c,275 :: 		next_state = s5;
 	MOVLW       5
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,276 :: 		}
-	GOTO        L_FSM45
-L_FSM44:
+	GOTO        L_FSM39
+L_FSM38:
 ;FIRMWARE_SYA_ver_1_4_0.c,278 :: 		}
-L_FSM45:
-L_FSM43:
+L_FSM39:
+L_FSM37:
 ;FIRMWARE_SYA_ver_1_4_0.c,279 :: 		break;
 	GOTO        L_FSM11
 ;FIRMWARE_SYA_ver_1_4_0.c,280 :: 		case s5:
-L_FSM46:
+L_FSM40:
 ;FIRMWARE_SYA_ver_1_4_0.c,281 :: 		M1 = 1;
 	BSF         LATA+0, 5 
 ;FIRMWARE_SYA_ver_1_4_0.c,282 :: 		M2 = 1;
@@ -433,27 +402,27 @@ L_FSM46:
 	BSF         LATE+0, 1 
 ;FIRMWARE_SYA_ver_1_4_0.c,284 :: 		if(1 == sn_NegEdge_3){
 	BTFSS       _sn_NegEdge_3+0, BitPos(_sn_NegEdge_3+0) 
-	GOTO        L_FSM47
+	GOTO        L_FSM41
 ;FIRMWARE_SYA_ver_1_4_0.c,285 :: 		next_state = s6;
 	MOVLW       6
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,286 :: 		}
-	GOTO        L_FSM48
-L_FSM47:
+	GOTO        L_FSM42
+L_FSM41:
 ;FIRMWARE_SYA_ver_1_4_0.c,288 :: 		}
-L_FSM48:
+L_FSM42:
 ;FIRMWARE_SYA_ver_1_4_0.c,289 :: 		break;
 	GOTO        L_FSM11
 ;FIRMWARE_SYA_ver_1_4_0.c,290 :: 		case s6:
-L_FSM49:
+L_FSM43:
 ;FIRMWARE_SYA_ver_1_4_0.c,291 :: 		if((1 == GT1) && (0 == GT2) && (0 == GT3)){
 	BTFSS       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM52
+	GOTO        L_FSM46
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM52
+	GOTO        L_FSM46
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM52
-L__FSM85:
+	GOTO        L_FSM46
+L__FSM79:
 ;FIRMWARE_SYA_ver_1_4_0.c,292 :: 		GT2 = 1;
 	BSF         _GT2+0, BitPos(_GT2+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,293 :: 		GT3 = 0;
@@ -464,16 +433,16 @@ L__FSM85:
 	MOVLW       4
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,296 :: 		}
-	GOTO        L_FSM53
-L_FSM52:
+	GOTO        L_FSM47
+L_FSM46:
 ;FIRMWARE_SYA_ver_1_4_0.c,297 :: 		else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
 	BTFSS       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM56
+	GOTO        L_FSM50
 	BTFSC       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM56
+	GOTO        L_FSM50
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM56
-L__FSM84:
+	GOTO        L_FSM50
+L__FSM78:
 ;FIRMWARE_SYA_ver_1_4_0.c,298 :: 		GT2 = 0;
 	BCF         _GT2+0, BitPos(_GT2+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,299 :: 		GT1 = 0;
@@ -484,16 +453,16 @@ L__FSM84:
 	MOVLW       4
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,302 :: 		}
-	GOTO        L_FSM57
-L_FSM56:
+	GOTO        L_FSM51
+L_FSM50:
 ;FIRMWARE_SYA_ver_1_4_0.c,303 :: 		else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
 	BTFSS       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM60
+	GOTO        L_FSM54
 	BTFSC       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM60
+	GOTO        L_FSM54
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM60
-L__FSM83:
+	GOTO        L_FSM54
+L__FSM77:
 ;FIRMWARE_SYA_ver_1_4_0.c,304 :: 		GT1 = 1;
 	BSF         _GT1+0, BitPos(_GT1+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,305 :: 		GT2 = 0;
@@ -504,66 +473,66 @@ L__FSM83:
 	MOVLW       4
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,308 :: 		}
-	GOTO        L_FSM61
-L_FSM60:
+	GOTO        L_FSM55
+L_FSM54:
 ;FIRMWARE_SYA_ver_1_4_0.c,310 :: 		}
-L_FSM61:
-L_FSM57:
-L_FSM53:
+L_FSM55:
+L_FSM51:
+L_FSM47:
 ;FIRMWARE_SYA_ver_1_4_0.c,311 :: 		break;
 	GOTO        L_FSM11
 ;FIRMWARE_SYA_ver_1_4_0.c,312 :: 		case s7:
-L_FSM62:
+L_FSM56:
 ;FIRMWARE_SYA_ver_1_4_0.c,313 :: 		clock0 = 0;
 	CLRF        _clock0+0 
 	CLRF        _clock0+1 
 ;FIRMWARE_SYA_ver_1_4_0.c,314 :: 		if((1 == GT1) && (0 == GT2) && (0 == GT3)){
 	BTFSS       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM65
+	GOTO        L_FSM59
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM65
+	GOTO        L_FSM59
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM65
-L__FSM82:
+	GOTO        L_FSM59
+L__FSM76:
 ;FIRMWARE_SYA_ver_1_4_0.c,315 :: 		next_state = s2;
 	MOVLW       2
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,316 :: 		}
-	GOTO        L_FSM66
-L_FSM65:
+	GOTO        L_FSM60
+L_FSM59:
 ;FIRMWARE_SYA_ver_1_4_0.c,317 :: 		else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
 	BTFSS       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM69
+	GOTO        L_FSM63
 	BTFSC       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM69
+	GOTO        L_FSM63
 	BTFSC       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM69
-L__FSM81:
+	GOTO        L_FSM63
+L__FSM75:
 ;FIRMWARE_SYA_ver_1_4_0.c,318 :: 		next_state = s3;
 	MOVLW       3
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,319 :: 		}
-	GOTO        L_FSM70
-L_FSM69:
+	GOTO        L_FSM64
+L_FSM63:
 ;FIRMWARE_SYA_ver_1_4_0.c,320 :: 		else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
 	BTFSS       _GT3+0, BitPos(_GT3+0) 
-	GOTO        L_FSM73
+	GOTO        L_FSM67
 	BTFSC       _GT1+0, BitPos(_GT1+0) 
-	GOTO        L_FSM73
+	GOTO        L_FSM67
 	BTFSC       _GT2+0, BitPos(_GT2+0) 
-	GOTO        L_FSM73
-L__FSM80:
+	GOTO        L_FSM67
+L__FSM74:
 ;FIRMWARE_SYA_ver_1_4_0.c,321 :: 		next_state = s1;
 	MOVLW       1
 	MOVWF       _next_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,322 :: 		}
-L_FSM73:
-L_FSM70:
-L_FSM66:
+L_FSM67:
+L_FSM64:
+L_FSM60:
 ;FIRMWARE_SYA_ver_1_4_0.c,323 :: 		break;
 	GOTO        L_FSM11
 ;FIRMWARE_SYA_ver_1_4_0.c,324 :: 		default:
-L_FSM74:
+L_FSM68:
 ;FIRMWARE_SYA_ver_1_4_0.c,325 :: 		current_state = s0;
 	CLRF        _current_state+0 
 ;FIRMWARE_SYA_ver_1_4_0.c,326 :: 		next_state = s0;
@@ -583,28 +552,28 @@ L_FSM10:
 	MOVF        _current_state+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L_FSM20
+	GOTO        L_FSM18
 	MOVF        _current_state+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L_FSM25
+	GOTO        L_FSM21
 	MOVF        _current_state+0, 0 
 	XORLW       4
 	BTFSC       STATUS+0, 2 
-	GOTO        L_FSM30
+	GOTO        L_FSM24
 	MOVF        _current_state+0, 0 
 	XORLW       5
 	BTFSC       STATUS+0, 2 
-	GOTO        L_FSM46
+	GOTO        L_FSM40
 	MOVF        _current_state+0, 0 
 	XORLW       6
 	BTFSC       STATUS+0, 2 
-	GOTO        L_FSM49
+	GOTO        L_FSM43
 	MOVF        _current_state+0, 0 
 	XORLW       7
 	BTFSC       STATUS+0, 2 
-	GOTO        L_FSM62
-	GOTO        L_FSM74
+	GOTO        L_FSM56
+	GOTO        L_FSM68
 L_FSM11:
 ;FIRMWARE_SYA_ver_1_4_0.c,330 :: 		}
 L_end_FSM:
@@ -627,9 +596,9 @@ _Events:
 ;FIRMWARE_SYA_ver_1_4_0.c,342 :: 		sn_PosEdge_3 = 0;
 	BCF         _sn_PosEdge_3+0, BitPos(_sn_PosEdge_3+0) 
 ;FIRMWARE_SYA_ver_1_4_0.c,343 :: 		switch(SWITCH1){
-	GOTO        L_Events75
+	GOTO        L_Events69
 ;FIRMWARE_SYA_ver_1_4_0.c,344 :: 		case 0:
-L_Events77:
+L_Events71:
 ;FIRMWARE_SYA_ver_1_4_0.c,345 :: 		next_state = s1;
 	MOVLW       1
 	MOVWF       _next_state+0 
@@ -640,21 +609,21 @@ L_Events77:
 	MOVWF       R12, 0
 	MOVLW       110
 	MOVWF       R13, 0
-L_Events78:
+L_Events72:
 	DECFSZ      R13, 1, 1
-	BRA         L_Events78
+	BRA         L_Events72
 	DECFSZ      R12, 1, 1
-	BRA         L_Events78
+	BRA         L_Events72
 	DECFSZ      R11, 1, 1
-	BRA         L_Events78
+	BRA         L_Events72
 	NOP
 ;FIRMWARE_SYA_ver_1_4_0.c,347 :: 		break;
-	GOTO        L_Events76
+	GOTO        L_Events70
 ;FIRMWARE_SYA_ver_1_4_0.c,348 :: 		}
-L_Events75:
+L_Events69:
 	BTFSS       PORTC+0, 1 
-	GOTO        L_Events77
-L_Events76:
+	GOTO        L_Events71
+L_Events70:
 ;FIRMWARE_SYA_ver_1_4_0.c,355 :: 		return;
 ;FIRMWARE_SYA_ver_1_4_0.c,357 :: 		}
 L_end_Events:
@@ -671,13 +640,13 @@ _InitSystems:
 	MOVWF       R12, 0
 	MOVLW       110
 	MOVWF       R13, 0
-L_InitSystems79:
+L_InitSystems73:
 	DECFSZ      R13, 1, 1
-	BRA         L_InitSystems79
+	BRA         L_InitSystems73
 	DECFSZ      R12, 1, 1
-	BRA         L_InitSystems79
+	BRA         L_InitSystems73
 	DECFSZ      R11, 1, 1
-	BRA         L_InitSystems79
+	BRA         L_InitSystems73
 	NOP
 ;FIRMWARE_SYA_ver_1_4_0.c,365 :: 		InitInterrupt();
 	CALL        _InitInterrupt+0, 0

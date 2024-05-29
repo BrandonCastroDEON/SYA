@@ -1,7 +1,7 @@
 //*******************************************************************
 // Programa: Simultaneo y Alternancia para bombas (3 bombas y 3 peras)
 // Autor(es): Brandon Castro.
-// Version: 1.3.0
+// Version: 1.4.0
 //*******************************************************************
 // Fecha: 13-05-2024
 //*******************************************************************
@@ -130,7 +130,7 @@ void interrupt(){
      if(1 == IOCCF.B1){
           IOCCF.B1 = 0; // Limpiamos la bandera de IOC
           interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
-          Delay_ms(100);
+          Delay_ms(500);
           if(1 == SWITCH1){
                sn_PosEdge_1 = 0;
                sn_NegEdge_1 = 1;
@@ -208,9 +208,9 @@ void FSM(){
                
                     next_state = s0;
                }
-               else if(1 == sn_PosEdge_2){
-                    next_state = s4;
-               }
+               // else if(1 == sn_PosEdge_2){
+               //      next_state = s4;
+               // }
                else{
                }
                break;
@@ -224,9 +224,9 @@ void FSM(){
                if(1 == sn_NegEdge_1){
                     next_state = s0;
                }
-               else if(1 == sn_PosEdge_2){
-                    next_state = s4;
-               }
+               // else if(1 == sn_PosEdge_2){
+               //      next_state = s4;
+               // }
                else{
                }
                break;
@@ -240,9 +240,9 @@ void FSM(){
                if(1 == sn_NegEdge_1){
                     next_state = s0;
                }
-               else if(1 == sn_PosEdge_2){
-                    next_state = s4;
-               }
+               // else if(1 == sn_PosEdge_2){
+               //      next_state = s4;
+               // }
                else{
                }
                break;
