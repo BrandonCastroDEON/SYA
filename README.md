@@ -222,13 +222,13 @@ TODO
 - Version final, cambios en la precision de cuando se detecta la interrupcion.
 - Añadido un delay para la deteccion de los cambios de estado.
 
-## [1.0.2.1] (Version para Carcamo 2/Bypass) 2024-04-23
+## [1.0.2.1] 2024-04-23
 
 ### Cambios
 
 - Alternancia para 1 bomba encendida y 2 apagadas.
 
-## [1.3.0] (Version para Carcamo 2/Bypass) 2024-05-23
+## [1.3.0] 2024-05-23
 
 ### Añadido
 
@@ -237,3 +237,14 @@ TODO
 ### Cambios
 
 - FSM ahora soporta alternancia para 1 motor en nivel 1, alternancia para 2 motores en nivel 2 y simultaneo en nivel 3.
+- La bomba toma precendencia a que grupo de trabajo tiene que ir.
+
+### Observaciones
+
+- Al encender el nivel 1 y 3 al mismo tiempo es posible que pueda encender 1 sola bomba. En cuanto se vuelva a tener una señal en nivel 2 o en el mismo nivel 3 el sistema se actualiza al estado correspondiente.
+
+## [1.4.0] 2024-05-29
+
+### Cambios
+
+- Misma logica que 1.3.0 pero solo funciona para alternancia sin ninguna otra salida.

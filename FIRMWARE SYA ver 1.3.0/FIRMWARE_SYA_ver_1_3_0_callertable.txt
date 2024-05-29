@@ -6,3 +6,4 @@ main
 		Events
 	FSM
 interrupt
+	Events

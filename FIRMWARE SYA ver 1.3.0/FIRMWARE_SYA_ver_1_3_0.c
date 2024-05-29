@@ -55,9 +55,9 @@ typedef enum{
 
 // Vector de interrupcion
 int clock0; // Bandera de reloj
-volatile int interruptC0; // flag interrupcion en C0
-volatile int interruptC1; // flag interrupcion en C1
-volatile int interruptC2; // flag interrupcion en C1
+volatile int interruptC0 = 0; // flag interrupcion en C0
+volatile int interruptC1 = 0; // flag interrupcion en C1
+volatile int interruptC2 = 0; // flag interrupcion en C1
 volatile int counter = 0; // Contador
 volatile int counter1 = 0; // Contador
 
@@ -73,7 +73,9 @@ bit sn_NegEdge_3; // Bandera de señal para transicion negativa en C2
 bit GT1; // Bandera de señal para grupo de trabajo 1
 bit GT2; // Bandera de señal para grupo de trabajo 1
 bit GT3; // Bandera de señal para grupo de trabajo 1
-int sn_GoTo; // Bandera de señal para señal intermedia
+int sn_GoTo = 0; // Bandera de señal para señal intermedia
+int sn_GoToGT = 0;
+int sn_error = 0;
 short unsigned int current_state, next_state;
 
 //*******************************************************************
@@ -105,7 +107,7 @@ void interrupt(){
           counter++;
           if(counter >= 200){
                LED = ~LED;
-               // Events();
+               Events();
                PIE0.TMR0IE = 0;
                counter = 0;
           }
@@ -130,9 +132,10 @@ void interrupt(){
                interruptC0 = 0;
           }
           else{
+               sn_GoToGT = 1;
                sn_PosEdge_1 = 1;
                sn_NegEdge_1 = 0;
-               next_state = s7;
+               next_state = s0;
                interruptC0 = 0; 
                if(!SWITCH2){
                     next_state = s4;
@@ -149,7 +152,7 @@ void interrupt(){
                          next_state = s5;
                     }
                     else{
-                         next_state = s7;
+                         next_state = s0;
                     }
                }
           }
@@ -164,6 +167,9 @@ void interrupt(){
                sn_PosEdge_2 = 0;
                sn_NegEdge_2 = 1;
                interruptC1 = 0; 
+               if(!SWITCH1){
+                    sn_GoToGT = 1;
+               }
           }
           else{
                sn_PosEdge_2 = 1;
@@ -188,8 +194,12 @@ void interrupt(){
                sn_PosEdge_3 = 0;
                sn_NegEdge_3 = 1;
                interruptC2 = 0;
-               if(SWITCH2 || SWITCH1){
-                    next_state = s0;
+               if(!SWITCH1){
+                    sn_GoToGT = 1;
+                    sn_error = 1;
+               }
+               if(!SWITCH2){
+                    sn_GoTo = 1;
                }
           }
           else{
@@ -229,6 +239,7 @@ void FSM(){
                M1 = 0;
                M2 = 0;
                M3 = 0;
+               // sn_GoToGT = 1;
                if(1 == sn_PosEdge_1){
                     next_state = s7; 
                }
@@ -285,6 +296,7 @@ void FSM(){
                }
                break;
           case s4:
+               sn_GoTo = 1;
                if((1 == GT1) && (0 == GT2) && (0 == GT3)){
                     M1 = 1;
                     M2 = 1;
@@ -326,37 +338,50 @@ void FSM(){
                }
                break;
           case s6:
-               if((1 == GT1) && (0 == GT2) && (0 == GT3)){
-                    GT2 = 1;
-                    GT3 = 0;
-                    GT1 = 0;
-                    next_state = s4;
+               if(sn_GoTo){
+                    if((1 == GT1) && (0 == GT2) && (0 == GT3)){
+                         GT2 = 1;
+                         GT3 = 0;
+                         GT1 = 0;
+                         next_state = s4;
+                    }
+                    else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
+                         GT2 = 0;
+                         GT1 = 0;
+                         GT3 = 1;
+                         next_state = s4;
+                    }
+                    else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
+                         GT1 = 1;
+                         GT2 = 0;
+                         GT3 = 0;
+                         next_state = s4;
+                    }
+                    else{
+                    }
                }
-               else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
-                    GT2 = 0;
-                    GT1 = 0;
-                    GT3 = 1;
-                    next_state = s4;
-               }
-               else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
-                    GT1 = 1;
-                    GT2 = 0;
-                    GT3 = 0;
-                    next_state = s4;
+               else if(sn_error){
+                    next_state = s7;
                }
                else{
+                    next_state = s0;
                }
                break;
           case s7:
                clock0 = 0;
-               if((1 == GT1) && (0 == GT2) && (0 == GT3)){
-                    next_state = s2;
+               if(sn_GoToGT){
+                    if((1 == GT1) && (0 == GT2) && (0 == GT3)){
+                         next_state = s2;
+                    }
+                    else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
+                         next_state = s3;
+                    }
+                    else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
+                         next_state = s1;
+                    }
                }
-               else if((1 == GT2) && (0 == GT1) && (0 == GT3)){
-                    next_state = s3;
-               }
-               else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
-                    next_state = s1;
+               else{
+                    next_state = s0;
                }
                break;
           default:
@@ -548,7 +573,7 @@ void InitMCU(){
      PORTE = 0x00;  //                ''             E
      PORTA = 0x10;  // Ponemos en linea alta en A4
 
-     LATC = 0x07;   // Dejamos en cero el registro del puerto C
+     LATC = 0x00;   // Dejamos en cero el registro del puerto C
      LATD = 0x00;
      LATE = 0x00;   //                ''                      E
      LATA = 0x10;   // Dejamos en 1 al pin A4

@@ -3607,7 +3607,9 @@ smp1
 smp1_bit
 smp2
 smp2_bit
+sn_error
 sn_goto
+sn_gotogt
 sn_negedge_1
 sn_negedge_2
 sn_negedge_3

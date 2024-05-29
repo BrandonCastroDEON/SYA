@@ -17,9 +17,9 @@ typedef enum{
 
 
 int clock0;
-volatile int interruptC0;
-volatile int interruptC1;
-volatile int interruptC2;
+volatile int interruptC0 = 0;
+volatile int interruptC1 = 0;
+volatile int interruptC2 = 0;
 volatile int counter = 0;
 volatile int counter1 = 0;
 
@@ -35,7 +35,9 @@ bit sn_NegEdge_3;
 bit GT1;
 bit GT2;
 bit GT3;
-int sn_GoTo;
+int sn_GoTo = 0;
+int sn_GoToGT = 0;
+int sn_error = 0;
 short unsigned int current_state, next_state;
 
 
@@ -67,7 +69,7 @@ void interrupt(){
  counter++;
  if(counter >= 200){
   LATA.F4  = ~ LATA.F4 ;
-
+ Events();
  PIE0.TMR0IE = 0;
  counter = 0;
  }
@@ -92,9 +94,10 @@ void interrupt(){
  interruptC0 = 0;
  }
  else{
+ sn_GoToGT = 1;
  sn_PosEdge_1 = 1;
  sn_NegEdge_1 = 0;
- next_state = s7;
+ next_state = s0;
  interruptC0 = 0;
  if(! PORTC.F1 ){
  next_state = s4;
@@ -111,7 +114,7 @@ void interrupt(){
  next_state = s5;
  }
  else{
- next_state = s7;
+ next_state = s0;
  }
  }
  }
@@ -126,6 +129,9 @@ void interrupt(){
  sn_PosEdge_2 = 0;
  sn_NegEdge_2 = 1;
  interruptC1 = 0;
+ if(! PORTC.F0 ){
+ sn_GoToGT = 1;
+ }
  }
  else{
  sn_PosEdge_2 = 1;
@@ -150,6 +156,13 @@ void interrupt(){
  sn_PosEdge_3 = 0;
  sn_NegEdge_3 = 1;
  interruptC2 = 0;
+ if(! PORTC.F0 ){
+ sn_GoToGT = 1;
+ sn_error = 1;
+ }
+ if(! PORTC.F1 ){
+ sn_GoTo = 1;
+ }
  }
  else{
  sn_PosEdge_3 = 1;
@@ -188,6 +201,7 @@ void FSM(){
   LATA.F5  = 0;
   LATE.F0  = 0;
   LATE.F1  = 0;
+
  if(1 == sn_PosEdge_1){
  next_state = s7;
  }
@@ -244,6 +258,7 @@ void FSM(){
  }
  break;
  case s4:
+ sn_GoTo = 1;
  if((1 == GT1) && (0 == GT2) && (0 == GT3)){
   LATA.F5  = 1;
   LATE.F0  = 1;
@@ -285,6 +300,7 @@ void FSM(){
  }
  break;
  case s6:
+ if(sn_GoTo){
  if((1 == GT1) && (0 == GT2) && (0 == GT3)){
  GT2 = 1;
  GT3 = 0;
@@ -305,9 +321,17 @@ void FSM(){
  }
  else{
  }
+ }
+ else if(sn_error){
+ next_state = s7;
+ }
+ else{
+ next_state = s0;
+ }
  break;
  case s7:
  clock0 = 0;
+ if(sn_GoToGT){
  if((1 == GT1) && (0 == GT2) && (0 == GT3)){
  next_state = s2;
  }
@@ -316,6 +340,10 @@ void FSM(){
  }
  else if((1 == GT3) && (0 == GT1) && (0 == GT2)){
  next_state = s1;
+ }
+ }
+ else{
+ next_state = s0;
  }
  break;
  default:
@@ -337,7 +365,7 @@ void Events(){
  sn_PosEdge_1 = 0;
  sn_PosEdge_2 = 0;
  sn_PosEdge_3 = 0;
-#line 421 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
+#line 449 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  switch( PORTC.F0 ){
  case 0:
  next_state = s1;
@@ -465,7 +493,7 @@ void InitMCU(){
  PORTE = 0x00;
  PORTA = 0x10;
 
- LATC = 0x07;
+ LATC = 0x00;
  LATD = 0x00;
  LATE = 0x00;
  LATA = 0x10;
