@@ -3,6 +3,6 @@ main
 	InitSystems
 		InitInterrupt
 		InitMCU
-		Events
 	FSM
 interrupt
+	Events

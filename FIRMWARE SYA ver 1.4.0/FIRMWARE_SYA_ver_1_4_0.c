@@ -23,8 +23,8 @@
 #define M2 LATE.F0 // Actuador 2 en R0
 #define M3 LATE.F1 // Actuador 3 en R1
 #define M4 LATE.F2 // Actuador 4 en R2
-#define SWITCH1 PORTC.F0 // Pastilla en C0
-#define SWITCH2 PORTC.F1 // Pastilla en C1
+#define SWITCH2 PORTC.F1 // Pastilla en C0
+#define SWITCH1 PORTC.F1 // Pastilla en C1
 #define SWITCH3 PORTC.F2 // Pastilla en C2
 #define TEST1 PORTC.F3 // Testigo de M1
 #define TEST2 PORTD.F0 // Testigo de M2
@@ -59,7 +59,6 @@ volatile int interruptC0; // flag interrupcion en C0
 volatile int interruptC1; // flag interrupcion en C1
 volatile int interruptC2; // flag interrupcion en C1
 volatile int counter = 0; // Contador
-volatile int counter1 = 0; // Contador
 
 // Posiciones del switch
 bit sn_PosEdge_1; // Bandera de señal para transicion positiva en C0
@@ -105,54 +104,26 @@ void interrupt(){
           counter++;
           if(counter >= 200){
                LED = ~LED;
-               // Events();
+               Events();
                PIE0.TMR0IE = 0;
                counter = 0;
-          }
-     }
-     if(PIR4.TMR1IF){
-          TMR1H = 0xEC;
-          TMR1L = 0x78;
-          PIR4.TMR1IF = 0;
-          counter1++;
-          if(counter1 >= 1000){
-               M4 = ~M4;
-               counter1 = 0;
           }
      }
      if(1 == IOCCF.B0){
           IOCCF.B0 = 0; // Limpiamos la bandera de IOC
           interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
-          Delay_ms(100); 
-          if(1 == SWITCH1){
-               sn_PosEdge_1 = 0;
-               sn_NegEdge_1 = 1;
-               interruptC0 = 0;
-          }
-          else{
-               sn_PosEdge_1 = 1;
-               sn_NegEdge_1 = 0;
-               next_state = s7;
-               interruptC0 = 0; 
-               if(!SWITCH2){
-                    next_state = s4;
-                    if(!SWITCH3){
-                         next_state = s5;
-                    }
-                    else{
-                         next_state = s4;
-                    }
-               }
-               else{
-                    next_state = s7;
-                    if(!SWITCH3){
-                         next_state = s5;
-                    }
-                    else{
-                         next_state = s7;
-                    }
-               }
-          }
+          // Delay_ms(100); 
+          // if(1 == SWITCH1){
+          //      sn_PosEdge_1 = 0;
+          //      sn_NegEdge_1 = 1;
+          //      interruptC0 = 0;
+          // }
+          // else{
+          //      sn_PosEdge_1 = 1;
+          //      sn_NegEdge_1 = 0;
+          //      next_state = s7;
+          //      interruptC0 = 0; 
+          // }
           // Events();
      }
      // Tenemos bandera de IOC en C1? y el bit de enable en IOC esta en 1?
@@ -160,22 +131,16 @@ void interrupt(){
           IOCCF.B1 = 0; // Limpiamos la bandera de IOC
           interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
           Delay_ms(100);
-          if(1 == SWITCH2){
-               sn_PosEdge_2 = 0;
-               sn_NegEdge_2 = 1;
+          if(1 == SWITCH1){
+               sn_PosEdge_1 = 0;
+               sn_NegEdge_1 = 1;
                interruptC1 = 0; 
           }
           else{
-               sn_PosEdge_2 = 1;
-               sn_NegEdge_2 = 0;
-               next_state = s4;
+               sn_PosEdge_1 = 1;
+               sn_NegEdge_1 = 0;
+               next_state = s7;
                interruptC1 = 0;
-               if(!SWITCH3){
-                    next_state = s5;
-               }
-               else{
-                    next_state = s4;
-               }
           }
           // Events();
      }
@@ -183,21 +148,18 @@ void interrupt(){
      if(1 == IOCCF.B2){
           IOCCF.B2 = 0; // Limpiamos la bandera de IOC
           interruptC2 = 1; // Ponemos en 1 la bandera de interrupcion en C0
-          Delay_ms(100);
-          if(1 == SWITCH3){
-               sn_PosEdge_3 = 0;
-               sn_NegEdge_3 = 1;
-               interruptC2 = 0;
-               if(SWITCH2 || SWITCH1){
-                    next_state = s0;
-               }
-          }
-          else{
-               sn_PosEdge_3 = 1;
-               sn_NegEdge_3 = 0;
-               next_state = s5;
-               interruptC2 = 0;
-          }
+          // Delay_ms(100);
+          // if(1 == SWITCH3){
+          //      sn_PosEdge_3 = 0;
+          //      sn_NegEdge_3 = 1;
+          //      interruptC2 = 0;
+          // }
+          // else{
+          //      sn_PosEdge_3 = 1;
+          //      sn_NegEdge_3 = 0;
+          //      next_state = s5;
+          //      interruptC2 = 0;
+          // }
           // Events();
      }
 
@@ -378,101 +340,11 @@ void Events(){
      sn_PosEdge_1 = 0;
      sn_PosEdge_2 = 0;
      sn_PosEdge_3 = 0;
-     // if(!SWITCH1){
-     //      next_state = s1;
-     //      if(!SWITCH2){
-     //           next_state = s4;
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     //      else{
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     // }
-     // else{
-     //      if(!SWITCH2){
-     //           next_state = s4;
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     //      else{
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     // }
      switch(SWITCH1){
           case 0:
                next_state = s1;
-               switch(SWITCH2){
-                    case 0:
-                         next_state = s4;
-                         switch(SWITCH3){
-                              case 0:
-                                   next_state = s5;
-                                   break;
-                              case 1:
-                                   next_state = s4;
-                                   break;
-                         }
-                         break;
-                    case 1:
-                         switch(SWITCH3){
-                              case 0:
-                                   next_state = s5;
-                                   break;
-                              case 1:
-                                   next_state = s1;
-                                   break;
-                         }
-                         break;
-               }
-               break;
-          case 1:
-               switch(SWITCH2){
-                    case 0:
-                         next_state = s4;
-                         switch(SWITCH3){
-                              case 0:
-                                   next_state = s5;
-                                   break;
-                              case 1:
-                                   next_state = s4;
-                                   break;
-                         }
-                         break;
-                    case 1:
-                         switch(SWITCH3){
-                              case 0:
-                                   next_state = s5;
-                                   break;
-                              case 1:
-                                   next_state = s0;
-                                   break;
-                         }
-                         break;
-               }
-               break;
+               Delay_ms(1000);
+          break;
      }
      // if(!SWITCH2){
      //      next_state = s4;
@@ -492,8 +364,6 @@ void InitSystems(){
      Delay_ms(1000);
      InitInterrupt();
      InitMCU();
-     Delay_ms(1000);
-     Events();
 }
 
 //*******************************************************************
@@ -517,11 +387,6 @@ void InitInterrupt(){
      // Peripheral Interrupt 4
      PIE4 = 0x02;
      PIR4 = 0x00;
-     // Timer 1 Setup
-     T1CON = 0x03;   // ~7, ~6, ![5, 4], ~3, ~2, #1(RD16), #0(ON)
-     T1GCON = 0x00;  // !7, !6, !5, !4, !3, !2, ~1, ~0
-     TMR1CLK = 0x01; // ~7, ~6, ~5, ~4, [!3, !2, !1, #0] = Fosc/4
-     TMR1 = 0xEC78;   // Timer para
      INTCON = 0xC0;  // Activamos bits de interrupt globales (GIE) y por perifericos (PIE)
 
 }
@@ -548,7 +413,7 @@ void InitMCU(){
      PORTE = 0x00;  //                ''             E
      PORTA = 0x10;  // Ponemos en linea alta en A4
 
-     LATC = 0x07;   // Dejamos en cero el registro del puerto C
+     LATC = 0x00;   // Dejamos en cero el registro del puerto C
      LATD = 0x00;
      LATE = 0x00;   //                ''                      E
      LATA = 0x10;   // Dejamos en 1 al pin A4
