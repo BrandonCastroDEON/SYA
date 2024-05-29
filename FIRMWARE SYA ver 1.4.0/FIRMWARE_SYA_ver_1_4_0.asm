@@ -120,12 +120,12 @@ L_interrupt2:
 	MOVWF       _interruptC1+0 
 	MOVLW       0
 	MOVWF       _interruptC1+1 
-;FIRMWARE_SYA_ver_1_4_0.c,133 :: 		Delay_ms(500);
-	MOVLW       13
+;FIRMWARE_SYA_ver_1_4_0.c,133 :: 		Delay_ms(200);
+	MOVLW       6
 	MOVWF       R11, 0
-	MOVLW       175
+	MOVLW       19
 	MOVWF       R12, 0
-	MOVLW       182
+	MOVLW       173
 	MOVWF       R13, 0
 L_interrupt4:
 	DECFSZ      R13, 1, 1
@@ -134,6 +134,7 @@ L_interrupt4:
 	BRA         L_interrupt4
 	DECFSZ      R11, 1, 1
 	BRA         L_interrupt4
+	NOP
 	NOP
 ;FIRMWARE_SYA_ver_1_4_0.c,134 :: 		if(1 == SWITCH1){
 	BTFSS       PORTC+0, 1 

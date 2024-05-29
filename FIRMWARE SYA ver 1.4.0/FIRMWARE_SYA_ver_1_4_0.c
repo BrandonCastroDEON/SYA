@@ -130,7 +130,7 @@ void interrupt(){
      if(1 == IOCCF.B1){
           IOCCF.B1 = 0; // Limpiamos la bandera de IOC
           interruptC1 = 1; // Ponemos en 1 la bandera de interrupcion en C0
-          Delay_ms(500);
+          Delay_ms(200);
           if(1 == SWITCH1){
                sn_PosEdge_1 = 0;
                sn_NegEdge_1 = 1;
