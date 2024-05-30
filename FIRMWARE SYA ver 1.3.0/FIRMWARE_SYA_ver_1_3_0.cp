@@ -74,30 +74,22 @@ void interrupt(){
  counter = 0;
  }
  }
- if(PIR4.TMR1IF){
- TMR1H = 0xEC;
- TMR1L = 0x78;
- PIR4.TMR1IF = 0;
- counter1++;
- if(counter1 >= 1000){
-  LATE.F2  = ~ LATE.F2 ;
- counter1 = 0;
- }
- }
  if(1 == IOCCF.B0){
  IOCCF.B0 = 0;
  interruptC0 = 1;
- Delay_ms(100);
+ Delay_ms(50);
  if(1 ==  PORTC.F0 ){
  sn_PosEdge_1 = 0;
  sn_NegEdge_1 = 1;
  interruptC0 = 0;
+ if(! PORTC.F2 ){
+ next_state = s5;
+ }
  }
  else{
  sn_GoToGT = 1;
  sn_PosEdge_1 = 1;
  sn_NegEdge_1 = 0;
- next_state = s0;
  interruptC0 = 0;
  if(! PORTC.F1 ){
  next_state = s4;
@@ -113,12 +105,8 @@ void interrupt(){
  if(! PORTC.F2 ){
  next_state = s5;
  }
- else{
- next_state = s0;
  }
  }
- }
-
  }
 
  if(1 == IOCCF.B1){
@@ -145,7 +133,6 @@ void interrupt(){
  next_state = s4;
  }
  }
-
  }
 
  if(1 == IOCCF.B2){
@@ -169,8 +156,10 @@ void interrupt(){
  sn_NegEdge_3 = 0;
  next_state = s5;
  interruptC2 = 0;
+ if(! PORTC.F0 ){
+ next_state = s5;
  }
-
+ }
  }
 
 }
@@ -184,7 +173,6 @@ void main(){
  InitSystems();
 
  while(1){
-
  current_state = next_state;
  FSM();
  }
@@ -331,7 +319,10 @@ void FSM(){
  break;
  case s7:
  clock0 = 0;
- if(sn_GoToGT){
+ if(! PORTC.F2 ){
+ next_state = s5;
+ }
+ else if(sn_GoToGT){
  if((1 == GT1) && (0 == GT2) && (0 == GT3)){
  next_state = s2;
  }
@@ -365,7 +356,6 @@ void Events(){
  sn_PosEdge_1 = 0;
  sn_PosEdge_2 = 0;
  sn_PosEdge_3 = 0;
-#line 449 "D:/Documents/Brandon Castro Veneroso/01 PROGRAMAS EN DESARROLLO/Simultaneo y alternancia/FIRMWARE SYA ver 1.3.0/FIRMWARE_SYA_ver_1_3_0.c"
  switch( PORTC.F0 ){
  case 0:
  next_state = s1;
@@ -419,12 +409,6 @@ void Events(){
  }
  break;
  }
-
-
-
-
-
-
  return;
 
 }
@@ -497,8 +481,6 @@ void InitMCU(){
  LATD = 0x00;
  LATE = 0x00;
  LATA = 0x10;
-
-
 
  WPUD = 0x07;
  INLVLD = 0x07;

@@ -112,16 +112,6 @@ void interrupt(){
                counter = 0;
           }
      }
-     if(PIR4.TMR1IF){
-          TMR1H = 0xEC;
-          TMR1L = 0x78;
-          PIR4.TMR1IF = 0;
-          counter1++;
-          if(counter1 >= 1000){
-               M4 = ~M4;
-               counter1 = 0;
-          }
-     }
      if(1 == IOCCF.B0){
           IOCCF.B0 = 0; // Limpiamos la bandera de IOC
           interruptC0 = 1; // Ponemos en 1 la bandera de interrupcion en C0
@@ -130,12 +120,14 @@ void interrupt(){
                sn_PosEdge_1 = 0;
                sn_NegEdge_1 = 1;
                interruptC0 = 0;
+               if(!SWITCH3){
+                    next_state = s5;
+               }
           }
           else{
                sn_GoToGT = 1;
                sn_PosEdge_1 = 1;
                sn_NegEdge_1 = 0;
-               next_state = s0;
                interruptC0 = 0; 
                if(!SWITCH2){
                     next_state = s4;
@@ -151,12 +143,8 @@ void interrupt(){
                     if(!SWITCH3){
                          next_state = s5;
                     }
-                    else{
-                         next_state = s0;
-                    }
                }
           }
-          // Events();
      }
      // Tenemos bandera de IOC en C1? y el bit de enable en IOC esta en 1?
      if(1 == IOCCF.B1){
@@ -183,7 +171,6 @@ void interrupt(){
                     next_state = s4;
                }
           }
-          // Events();
      }
      // Tenemos bandera de IOC en C0? y el bit de enable en IOC esta en 1?
      if(1 == IOCCF.B2){
@@ -207,8 +194,10 @@ void interrupt(){
                sn_NegEdge_3 = 0;
                next_state = s5;
                interruptC2 = 0;
+               if(!SWITCH1){
+                    next_state = s5;
+               }
           }
-          // Events();
      }
 
 }
@@ -222,7 +211,6 @@ void main(){
      InitSystems();
 
      while(1){
-          // Events();
           current_state = next_state; // Maybe move this with Events
           FSM();
      }
@@ -369,7 +357,10 @@ void FSM(){
                break;
           case s7:
                clock0 = 0;
-               if(sn_GoToGT){
+                if(!SWITCH3){
+                    next_state = s5;
+               }
+               else if(sn_GoToGT){
                     if((1 == GT1) && (0 == GT2) && (0 == GT3)){
                          next_state = s2;
                     }
@@ -403,49 +394,6 @@ void Events(){
      sn_PosEdge_1 = 0;
      sn_PosEdge_2 = 0;
      sn_PosEdge_3 = 0;
-     // if(!SWITCH1){
-     //      next_state = s1;
-     //      if(!SWITCH2){
-     //           next_state = s4;
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     //      else{
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     // }
-     // else{
-     //      if(!SWITCH2){
-     //           next_state = s4;
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     //      else{
-     //           if(!SWITCH3){
-     //                next_state = s5;
-     //           }
-     //           else{
-     //                next_state = s0;
-     //                return;
-     //           }
-     //      }
-     // }
      switch(SWITCH1){
           case 0:
                next_state = s1;
@@ -499,12 +447,6 @@ void Events(){
                }
                break;
      }
-     // if(!SWITCH2){
-     //      next_state = s4;
-     // }
-     // if(!SWITCH3){
-     //      next_state = s5;
-     // }
      return;
 
 }
@@ -578,8 +520,6 @@ void InitMCU(){
      LATE = 0x00;   //                ''                      E
      LATA = 0x10;   // Dejamos en 1 al pin A4
 
-     // WPUC = 0x0F;   // Activamos el pull-up interno de C0 y C1
-     // INLVLC = 0x0F; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
      WPUD = 0x07;   // Activamos el pull-up interno de C0 y C1
      INLVLD = 0x07; // Desactivamos valores TTL para C0 y C1 asumiento valores CMOS
      CM1CON0 = 0x00; // Desactivamos el comparador 1
